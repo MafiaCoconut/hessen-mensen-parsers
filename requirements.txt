@@ -3,7 +3,7 @@ unicorn
 icecream
 psycopg2
 sqlalchemy
-
+psycopg2-binary
 
 
 
