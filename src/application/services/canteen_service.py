@@ -7,5 +7,5 @@ class CanteenService:
         self.canteens_repository = canteens_repository
         self.get_canteen_use_case = GetCanteenUseCase(canteens_repository=canteens_repository)
 
-    def get(self, canteen_id):
-        return self.get_canteen_use_case.get()
+    def get(self, canteen_id: int):
+        return self.get_canteen_use_case.get(canteen_id)

@@ -8,14 +8,14 @@ from infrastructure.db.base import get_db
 
 
 class CanteensRepositoryImpl(CanteensRepository):
-    @staticmethod
-    def get_all(db: Session = Depends(get_db)) -> List[Canteen]:
+    def __init__(self, db_connection: Session):
+        self.db_connection = db_connection
+
+    def get_all(self) -> List[Canteen]:
         pass
 
-    @staticmethod
-    def get(canteen_id: int, db=Depends(get_db)) -> Canteen:
-        return db.query(Canteen).filter(Canteen.canteen_id == canteen_id).first()
+    def get(self, canteen_id: int) -> Canteen:
+        return self.db_connection.query(Canteen).filter(Canteen.canteen_id == canteen_id).first()
 
-    @staticmethod
     def save(canteen: Canteen, db: Session = Depends(get_db)) -> None:
         pass
