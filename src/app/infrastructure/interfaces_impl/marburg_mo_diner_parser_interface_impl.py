@@ -1,6 +1,6 @@
-from src.app.application.interfaces.parser_interface import CanteenParser
+from src.app.application.interfaces.parser_interface import CanteenParserInterface
 
 
-class MarburgMoDinerParserImpl(CanteenParser):
+class MarburgMoDinerParserInterfaceImpl(CanteenParserInterface):
     def parse(self):
         pass

@@ -1,7 +1,10 @@
-class ParseMensaUseCase:
-    def __init__(self, parser_service):
-        self.parser_service = parser_service
+from src.app.application.interfaces.parser_interface import CanteenParserInterface
 
-    def execute(self, canteen_name: str):
-        return self.parser_service.parse(canteen_name)
+
+class ParseMensaUseCase:
+    def __init__(self, parser_interface: CanteenParserInterface):
+        self.parser_interface = parser_interface
+
+    def execute(self):
+        return self.parser_interface.parse()
 

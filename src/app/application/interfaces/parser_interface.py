@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class CanteenParser(ABC):
+class CanteenParserInterface(ABC):
     @abstractmethod
     def parse(self):
         pass
