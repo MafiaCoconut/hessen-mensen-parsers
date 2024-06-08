@@ -1,15 +1,13 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from src.infrastructure.db.base import Base
-from sqlalchemy import Column, Integer, String, DATETIME
 
 @dataclass
-class SideDish(Base):
+class SideDish:
 
-    side_dish_id: int | None
-    canteen_id: int | None
-    name: str
+    side_dish_id: int = field(default=None)
+    canteen_id: int = field(default=None)
+    name: str = field(default=None)
     type: str = field(default=None)
     price: str = field(default=None)
     properties: str = field(default=None)

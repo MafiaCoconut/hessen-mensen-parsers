@@ -9,9 +9,6 @@ from infrastructure.db.models.canteens_orm import CanteensOrm
 from icecream import ic
 
 class CanteensRepositoryImpl(CanteensRepository):
-    # def __init__(self, db_connection: Session):
-    #     self.db_connection = db_connection
-
     def get_all(self) -> List[Canteen]:
         with session_factory() as session:
             query = select(CanteensOrm)
@@ -46,9 +43,9 @@ class CanteensRepositoryImpl(CanteensRepository):
 
 
 
-canteen_repository = CanteensRepositoryImpl()
-canteen = Canteen(canteen_id=8, name="dsfdsffs")
-canteen_repository.save(canteen=canteen)
+# canteen_repository = CanteensRepositoryImpl()
+# canteen = Canteen(canteen_id=8, name="dsfdsffs")
+# canteen_repository.save(canteen=canteen)
 
 # canteen_repository.get_all()
 # canteen_repository.get(canteen_id=1)

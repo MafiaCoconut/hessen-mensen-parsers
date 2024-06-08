@@ -10,6 +10,7 @@ class MainDishesOrm(Base):
     __tablename__ = 'main_dishes'
 
     main_dish_id: Mapped[intpk]
+
     name: Mapped[str]
     type: Mapped[str]
     price: Mapped[str]
