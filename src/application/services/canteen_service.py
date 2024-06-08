@@ -2,6 +2,7 @@ from application.providers.canteens_provider import CanteensDependencyProvider
 from application.repositories.canteens_repository import CanteensRepository
 from application.repositories.main_dishes_repository import MainDishesRepository
 from application.repositories.side_dishes_repository import SideDishesRepository
+from application.services.translation_service import TranslationService
 from application.use_cases.get_canteen_use_case import GetCanteenUseCase
 from application.use_cases.get_canteens_menu_use_case import GetCanteensMenuUseCase
 from application.use_cases.parse_menu_use_case import ParseCanteensMenuUseCase
@@ -14,16 +15,19 @@ class CanteenService:
                  main_dishes_repository: MainDishesRepository,
                  side_dishes_repository: SideDishesRepository,
                  canteens_provider: CanteensDependencyProvider,
+                 translation_service: TranslationService
                  ):
         self.canteens_repository = canteens_repository
         self.main_dishes_repository = main_dishes_repository
         self.side_dishes_repository = side_dishes_repository
         self.canteens_provider = canteens_provider
+        self.translation_service = translation_service
 
         self.get_canteen_use_case = GetCanteenUseCase(canteens_repository=canteens_repository)
         self.get_canteens_menu_use_case = GetCanteensMenuUseCase(
             main_dishes_repository=self.main_dishes_repository,
-            side_dishes_repository=self.side_dishes_repository
+            side_dishes_repository=self.side_dishes_repository,
+            translation_service=translation_service
         )
         self.save_canteens_menu_use_case = SaveMenuUseCase(
             main_dishes_repository=self.main_dishes_repository,
