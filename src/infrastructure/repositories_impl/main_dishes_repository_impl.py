@@ -1,26 +1,21 @@
-from abc import ABC, abstractmethod
-
+from application.repositories.main_dishes_repository import MainDishesRepository
 from domain.entities.main_dish import MainDish
 
 
-class MainDishesRepository(ABC):
+class MainDishesRepositoryImpl(MainDishesRepository):
     @staticmethod
-    @abstractmethod
     def get(main_dish_id: int):
         pass
 
     @staticmethod
-    @abstractmethod
     def get_all_from_canteen(main_dish_id: int):
         pass
 
     @staticmethod
-    @abstractmethod
     def get_all():
         pass
 
     @staticmethod
-    @abstractmethod
     def save(main_dish: MainDish):
         pass
 

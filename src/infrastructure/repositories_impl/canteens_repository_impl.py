@@ -49,6 +49,7 @@ class CanteensRepositoryImpl(CanteensRepository):
 canteen_repository = CanteensRepositoryImpl()
 canteen = Canteen(canteen_id=8, name="dsfdsffs")
 canteen_repository.save(canteen=canteen)
+
 # canteen_repository.get_all()
 # canteen_repository.get(canteen_id=1)
 # canteen_repository.update(canteen_id=7, canteen_name='тестовая столовая_1')

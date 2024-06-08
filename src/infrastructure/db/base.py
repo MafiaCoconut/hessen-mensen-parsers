@@ -33,24 +33,8 @@ async_engine = create_async_engine(
 
 session_factory = sessionmaker(sync_engine)
 async_session_factory = async_sessionmaker(async_engine)
-print('!!!!!!!!!!!!!')
+
 
 class Base(DeclarativeBase):
     pass
 
-
-# SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=sync_engine)
-
-
-# with sync_engine.connect() as conn:
-#     res = conn.execute(text("SELECT VERSION()"))
-#     print(res.scalar())
-#
-#
-# async def get_version():
-#     async with async_engine.connect() as conn:
-#         res = await conn.execute(text("SELECT VERSION()"))
-#         print(res.scalar())
-#
-#
-# asyncio.run(get_version())
