@@ -1,7 +1,7 @@
-from src.application.interfaces.parser_interface import CanteenParserInterface
+from application.interfaces.parser_interface import CanteenParserInterface
 
 
-class ParseMensaUseCase:
+class ParseCanteensMenuUseCase:
     def __init__(self, parser_interface: CanteenParserInterface):
         self.parser_interface = parser_interface
 

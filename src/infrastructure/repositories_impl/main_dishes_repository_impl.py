@@ -1,12 +1,14 @@
+from typing import List
 
 from application.repositories.main_dishes_repository import MainDishesRepository
 from domain.entities.main_dish import MainDish
 from infrastructure.db.base import sync_engine, session_factory, Base
 from infrastructure.db.models.main_dishes_orm import MainDishesOrm
-from sqlalchemy import select
+from sqlalchemy import select, delete
 
 from infrastructure.db.models.canteens_orm import CanteensOrm
 from infrastructure.db.models.side_dishes_orm import SideDishesOrm
+
 
 class MainDishesRepositoryImpl(MainDishesRepository):
     @staticmethod
@@ -20,7 +22,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
         with session_factory() as session:
             query = (
                 select(MainDishesOrm)
-                .filter(MainDishesOrm.canteen_id == canteen_id)
+                .filter(MainDishesOrm.canteen_id == int(canteen_id))
             )
 
             res = session.execute(query)
@@ -47,6 +49,30 @@ class MainDishesRepositoryImpl(MainDishesRepository):
                 canteen_id=main_dish.canteen_id
             )
             session.add(main_dish)
+            session.commit()
+
+    @staticmethod
+    def save_many(main_dishes: List[MainDish]):
+        with session_factory() as session:
+            for dish in main_dishes:
+                main_dish = MainDishesOrm(
+                    name=dish.name,
+                    type=dish.type,
+                    price=dish.price,
+                    properties=dish.properties,
+                    canteen_id=dish.canteen_id
+                )
+                session.add(main_dish)
+            session.commit()
+
+    @staticmethod
+    def delete_old_dishes(canteen_id: int):
+        with session_factory() as session:
+            query = (
+                delete(MainDishesOrm)
+                .filter(MainDishesOrm.canteen_id == int(canteen_id))
+            )
+            print(session.execute(query))
             session.commit()
 
 
