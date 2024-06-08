@@ -14,6 +14,7 @@ class GetCanteensMenuUseCase:
     def execute(self, canteen_id):
         main_dishes = self.main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         side_dishes = self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
+
         print(main_dishes)
         print(side_dishes)
 
