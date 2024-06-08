@@ -88,4 +88,17 @@ class CanteenService:
         return result
 
     def parse_all_canteens(self):
-        pass
+        canteens = {
+            '1': "erlenring",
+            '2': "lahnberge",
+            '3': "bistro",
+            '4': "cafeteria",
+            '5': "mo_diner",
+            '6': "thm",
+        }
+
+        result = {}
+        for i in canteens.keys():
+            result[canteens[i]] = self.parse_canteen(int(i))
+        print(result)
+        return result

@@ -17,15 +17,19 @@ def read_canteens_menu(canteen_id: int):
 
     return {"menu": canteens_service.get_menu(canteen_id=canteen_id)}
 
+
+@router.get('/parser/all')
+def start_canteens_parser():
+
+    return canteens_service.parse_all_canteens()
+
+
 @router.get('/parser/{canteen_id}')
 def start_canteens_parser(canteen_id: int):
 
     return canteens_service.parse_canteen(canteen_id=int(canteen_id))
 
-@router.get('/parser/all')
-def start_canteens_parser(canteen_id: int):
 
-    return canteens_service.parse_canteen(canteen_id=int(canteen_id))
 
 
 @router.get('/start')
