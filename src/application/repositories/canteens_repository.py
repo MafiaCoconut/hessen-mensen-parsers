@@ -8,13 +8,13 @@ from domain.entities.canteen import Canteen
 class CanteensRepository(ABC):
 
     @abstractmethod
-    def get_all(self, db: Session) -> List[Canteen]:
+    def get_all(self) -> List[Canteen]:
         pass
 
     @abstractmethod
-    def get(self, canteen_id: int, db: Session) -> Canteen:
+    def get(self, canteen_id: int) -> Canteen:
         pass
 
     @abstractmethod
-    def save(self, canteen: Canteen, db: Session) -> None:
+    def save(self, canteen: Canteen) -> None:
         pass
