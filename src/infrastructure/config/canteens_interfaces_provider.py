@@ -5,10 +5,10 @@ from infrastructure.interfaces_impl.marburg_erlenring_parser_interface_impl impo
 from infrastructure.interfaces_impl.marburg_lahnberge_parser_interface_impl import MarburgLahnbergeParserInterfaceImpl
 from infrastructure.interfaces_impl.marburg_mo_diner_parser_interface_impl import MarburgMoDinerParserInterfaceImpl
 
-
 marburg_erlenring = MarburgErlenringParserInterfaceImpl()
 marburg_lahnberge = MarburgLahnbergeParserInterfaceImpl()
 marburg_bistro = MarburgBistroParserInterfaceImpl()
 marburg_cafeteria = MarburgCafeteriaParserInterfaceImpl()
 marburg_mo_diner = MarburgMoDinerParserInterfaceImpl()
 giessen_thm = GiessenTHMParserInterfaceImpl()
+

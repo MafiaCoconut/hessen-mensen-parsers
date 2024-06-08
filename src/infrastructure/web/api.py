@@ -30,8 +30,6 @@ def start_canteens_parser(canteen_id: int):
     return canteens_service.parse_canteen(canteen_id=int(canteen_id))
 
 
-
-
 @router.get('/start')
 def start_canteens_parser():
     return {"Hello world"}
