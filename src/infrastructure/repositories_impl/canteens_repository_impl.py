@@ -14,40 +14,41 @@ class CanteensRepositoryImpl(CanteensRepository):
 
     def get_all(self) -> List[Canteen]:
         with session_factory() as session:
-            # ic(session)
-            # print('---------------------')
             query = select(CanteensOrm)
-            # ic(query)
             result = session.execute(query)
             canteens = result.scalars().all()
-            ic(canteens)
 
-            # querry = select()
+            return canteens
 
     def get(self, canteen_id: int) -> Canteen:
-        pass
-        # return self.db_connection.query(Canteen).filter(Canteen.canteen_id == canteen_id).first()
-
-    def update(self, canteen_id: int, canteen_name: str):
         with session_factory() as session:
             canteen = session.get(CanteensOrm, canteen_id)
-            canteen.name = canteen_name
-            session.commit()
+
+            return canteen
+
+    # def update(self, canteen_id: int, canteen_name: str):
+    #     with session_factory() as session:
+    #         canteen = session.get(CanteensOrm, canteen_id)
+    #         canteen.name = canteen_name
+    #         session.commit()
 
 
     def save(self, canteen: Canteen = None) -> None:
-        pass
-        # with sync_engine.connect() as conn:
-        #     stmt = insert(canteens_table).values(
-        #         {
-        #             "name": "тестовая столовая"
-        #         }
-        #     )
-        #     conn.execute(stmt)
-        #     conn.commit()
+        with session_factory() as session:
+
+            canteen_orm = CanteensOrm(
+                canteen_id=canteen.canteen_id,
+                name=canteen.name,
+                created_at=canteen.created_at
+            )
+            session.add(canteen_orm)
+            session.commit()
+
 
 
 canteen_repository = CanteensRepositoryImpl()
-# canteen_repository.save()
+canteen = Canteen(canteen_id=8, name="dsfdsffs")
+canteen_repository.save(canteen=canteen)
 # canteen_repository.get_all()
-canteen_repository.update(canteen_id=7, canteen_name='тестовая столовая_1')
+# canteen_repository.get(canteen_id=1)
+# canteen_repository.update(canteen_id=7, canteen_name='тестовая столовая_1')

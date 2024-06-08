@@ -1,4 +1,6 @@
 from datetime import datetime
+from dataclasses import dataclass, field
+from typing import Optional
 
 from infrastructure.db.base import Base
 from sqlalchemy import Column, Integer, String, DATETIME, Table, MetaData
@@ -13,11 +15,11 @@ from sqlalchemy import Column, Integer, String, DATETIME, Table, MetaData
 #
 # )
 
-
+@dataclass
 class Canteen:
     canteen_id: int
     name: str
-    created_at: datetime
+    created_at: Optional[datetime] = field(default=None)
 
 
 # class Canteen(Base):
