@@ -12,7 +12,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
     @staticmethod
     def get(main_dish_id: int):
         with session_factory() as session:
-            main_dish = session.get(MainDishesOrm, main_dish_id)
+            main_dish = session.get(MainDishesOrm, main_dish_id).first()
             return main_dish
 
     @staticmethod
@@ -51,16 +51,16 @@ class MainDishesRepositoryImpl(MainDishesRepository):
 
 
 # Base.metadata.create_all(sync_engine)
-object_1 = MainDishesRepositoryImpl()
-main_dish = MainDish(
-    name="test",
-    type="test",
-    price="test",
-    properties="test",
-    canteen_id=1
-)
-object_1.save(main_dish)
-print('-----------------------------')
-object_1.get_all_from_canteen(1)
-print('-----------------------')
-object_1.get(1)
+# object_1 = MainDishesRepositoryImpl()
+# main_dish = MainDish(
+#     name="test",
+#     type="test",
+#     price="test",
+#     properties="test",
+#     canteen_id=1
+# )
+# object_1.save(main_dish)
+# print('-----------------------------')
+# object_1.get_all_from_canteen(1)
+# print('-----------------------')
+# object_1.get(1)

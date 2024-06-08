@@ -11,7 +11,7 @@ class SideDishesRepository(ABC):
 
     @staticmethod
     @abstractmethod
-    def get_all_from_canteen(side_dish_id: int, canteen_id: int):
+    def get_all_from_canteen(canteen_id: int):
         pass
 
     @staticmethod
