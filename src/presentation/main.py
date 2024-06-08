@@ -8,7 +8,6 @@ app.include_router(router)
 
 @app.on_event("startup")
 async def startup_event():
-    # TODO добавить сюда scheduler
     set_all_scheduler_service.execute()
 
 
