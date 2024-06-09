@@ -8,13 +8,13 @@ from sqlalchemy import select, delete
 
 class SideDishesRepositoryImpl(SideDishesRepository):
     @staticmethod
-    def get(side_dish_id: int):
+    def get(side_dish_id: int)-> SideDish:
         with session_factory() as session:
             side_dish = session.query(SideDishesOrm, side_dish_id).first()
             return side_dish
 
     @staticmethod
-    def get_all_from_canteen(canteen_id: int):
+    def get_all_from_canteen(canteen_id: int) -> list[SideDish]:
         with session_factory() as session:
             query = (
                 select(SideDishesOrm)
@@ -25,7 +25,7 @@ class SideDishesRepositoryImpl(SideDishesRepository):
             return side_dishes
 
     @staticmethod
-    def get_all():
+    def get_all() -> list[SideDish]:
         with session_factory() as session:
             query = select(SideDishesOrm)
             res = session.execute(query)

@@ -25,17 +25,25 @@ class GetCanteensMenuUseCase:
         side_dishes = self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         canteen = self.canteens_repository.get(canteen_id)
 
-        print(main_dishes)
-        print(side_dishes)
+        # print(main_dishes)
+        # print(side_dishes)
         # TODO  добавить красивый вывод текста через форматирование и translation_service
         # return {"main_dishes": main_dishes, "side_dishes": side_dishes}
         result = {'menu': None,
                   'error': self.check_menu_errors(canteen=canteen, locale=locale, main_dishes=main_dishes)}
-        ic(result)
+        # ic(result)
 
-        menu_text = ""
-        menu_text += self.get_main_dishes_text(canteen=canteen, main_dishes=main_dishes, locale=locale)
-        print(menu_text)
+        try:
+            menu_text = ""
+            menu_text += self.get_header(canteen=canteen, locale=locale, created_at=main_dishes[0].created_at)
+            menu_text += self.get_main_dishes_text(main_dishes=main_dishes, locale=locale)
+            menu_text += self.get_side_dishes_text(side_dishes=side_dishes, locale=locale)
+
+            print(menu_text)
+            result['menu'] = menu_text
+        except:
+            pass
+        return result
 
 
     def check_menu_errors(self, canteen: Canteen, locale: str, main_dishes: list):
@@ -67,21 +75,26 @@ class GetCanteensMenuUseCase:
 
         return {'type': error_type, 'text': error_text}
 
-    def get_main_dishes_text(self, main_dishes: list, locale: str, canteen: Canteen):
-        text = ""
-        time_parser = main_dishes[0].created_at
-        ic(time_parser)
+    def get_header(self, created_at: datetime, locale: str, canteen: Canteen):
+        time_parser = created_at
         day = f"{str(time_parser.day).zfill(2)}.{str(time_parser.month).zfill(2)}"
         time_last_parser = f"{str(time_parser.hour).zfill(2)}:{str(time_parser.minute).zfill(2)}"
 
-        text += self.translation_service.translate(
+        text = self.translation_service.translate(
             message_id='dishes-header',
             locale=locale,
             canteen_name=canteen.name,
             day=day,
             time_last_parser=time_last_parser
         ) + '\n\n\n'
-        # --------------------------------------
+        return text
+
+    def get_main_dishes_text(self, main_dishes: list, locale: str):
+
+        text = self.translation_service.translate(
+            message_id='main-dishes-title',
+            locale=locale) + '\n'
+
         last_type_of_dish = ""
         for dish in main_dishes:
             if dish.name == "" or dish.name is None or dish.name == " ":
@@ -95,12 +108,35 @@ class GetCanteensMenuUseCase:
             dish_text += f"* {dish.name}\n"
             if dish.properties != 'None':
                 dish_text += f"- {dish.properties}\n"
-            # dish_text += f"~ {type_of_dish}\n"
             dish_text += f"= {dish.price}\n\n"
 
             text += dish_text
 
         return text
+
+    def get_side_dishes_text(self, side_dishes: list, locale: str):
+        if not side_dishes:
+            return ""
+
+        text = self.translation_service.translate(
+            message_id='beilagen-title',
+            locale=locale) + '\n'
+
+        for side_dish in side_dishes:
+            if side_dish.name == "" or side_dish.name is None or side_dish.name == " ":
+                continue
+            else:
+                # name_dish = side_dish[1]
+                # properties = side_dish[2]
+                side_dish_text = f"* {side_dish.name}\n"
+                if side_dish.properties != 'None':
+                    side_dish_text += f"- {side_dish.properties}\n"
+                if side_dish.price != 'None':
+                    side_dish_text += f"= {side_dish.price}\n"
+
+                text += side_dish_text + '\n'
+        return text
+
 
 # if __name__ == "__main__":
 #     obj = GetCanteensMenuUseCase()
