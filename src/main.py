@@ -12,6 +12,8 @@ async def startup_event():
 
 
 
-# if __name__ == '__main__':
-#     pass
+if __name__ == '__main__':
+    pass
+    # obj = GiessenTHMParserInterfaceImpl()
+    # obj.parse()
 

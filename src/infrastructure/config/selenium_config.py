@@ -29,7 +29,7 @@ def get_selenium_driver():
     }
 
     options = FirefoxOptions()
-
+    print(os.getenv("DEVICE"))
     if os.getenv("DEVICE") == "Ubuntu":
         options.binary_location = "/usr/bin/firefox"
 
@@ -41,7 +41,7 @@ def get_selenium_driver():
         # print(geckodriver_path)
         # ic(f"geckodriver path: {geckodriver_path}")
 
-        geckodriver_path = "geckodriver"
+        geckodriver_path = "/usr/local/bin/geckodriver"
     # elif os.getenv("DEVICE") == "RaspberryTest":
     elif os.getenv("DEVICE") == "Raspberry" or os.getenv("DEVICE") == "RaspberryTest":
         geckodriver_path = "/app/geckodriver"

@@ -67,5 +67,5 @@ class SideDishesRepositoryImpl(SideDishesRepository):
                 delete(SideDishesOrm)
                 .filter(SideDishesOrm.canteen_id == int(canteen_id))
             )
-            print(session.execute(query))
+            session.execute(query)
             session.commit()

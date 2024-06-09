@@ -7,10 +7,10 @@ from domain.entities.side_dish import SideDish
 from icecream import ic
 import re
 
-from infrastructure.interfaces_impl.base_parser_interface_impl import BaseParser
+from infrastructure.interfaces_impl.marburg_parsers_impl.base_parser_marburg_interface_impl import BaseMarburgParser
 
 
-class MarburgCafeteriaParserInterfaceImpl(BaseParser):
+class MarburgCafeteriaParserInterfaceImpl(BaseMarburgParser):
     def __init__(self):
         super().__init__()
         self.canteen_number = "490"
@@ -60,41 +60,9 @@ class MarburgCafeteriaParserInterfaceImpl(BaseParser):
 
         # У объекта main_dish всегда > 2-ух элементов, у side_dish всегда <= 2
         if len(dishes_list) > 2:
-            dish_obj = self.rafactor_main_dish(dishes_list)
+            dish_obj = self.rafactor_main_dish(dishes_list, canteen_id=self.canteen_id)
         else:
-            dish_obj = self.refactor_side_dish(dishes_list)
+            dish_obj = self.refactor_side_dish(dishes_list, canteen_id=self.canteen_id)
 
         return dish_obj
 
-
-    def rafactor_main_dish(self, dish: list):
-        main_dish = MainDish(canteen_id=self.canteen_id)
-
-        main_dish.name = self.format_title(dish[0])
-        main_dish.type = dish[1]
-        main_dish.price = dish[-1]
-
-        properties = main_dish.type[main_dish.type.rfind(' ') + 1:]
-        item_properties_in_type = self.is_vegan_or_is_sweet(properties)
-
-        item_properties_in_separate_cell = dish[-2]
-        if item_properties_in_separate_cell != main_dish.type:
-            main_dish.properties = item_properties_in_separate_cell
-
-        else:
-            main_dish.properties = item_properties_in_type
-
-        main_dish.type = main_dish.type[
-                         :main_dish.type.rfind(' ')] if item_properties_in_type != 'None' else main_dish.type
-        return main_dish
-
-    def refactor_side_dish(self, dish: list):
-        side_dish = SideDish(canteen_id=self.canteen_id)
-
-        side_dish.name = self.format_title(dish[0])
-        if len(dish) == 2:
-            side_dish.properties = dish[1]
-        else:
-            side_dish.properties = self.is_vegan_or_is_sweet(dish[0])
-
-        return side_dish

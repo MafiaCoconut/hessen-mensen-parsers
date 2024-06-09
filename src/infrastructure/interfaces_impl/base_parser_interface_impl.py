@@ -2,13 +2,12 @@ from application.interfaces.parser_interface import CanteenParserInterface
 import re
 from datetime import datetime
 
-
 class BaseParser(CanteenParserInterface):
     def __init__(self):
         self.canteens_open_time = None
 
     def parse(self) -> dict:
-        pass
+        raise NotImplementedError("This method should be overridden in a subclass")
 
     @staticmethod
     def format_title(data: str):
@@ -40,3 +39,4 @@ class BaseParser(CanteenParserInterface):
         if 1 <= weekday <= 5:
             return True
         return False
+

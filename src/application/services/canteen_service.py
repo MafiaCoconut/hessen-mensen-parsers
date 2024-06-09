@@ -67,8 +67,10 @@ class CanteenService:
 
     def parse_canteen(self, canteen_id: int):
         self.main_dishes_repository.delete_old_dishes(canteen_id)
+        self.side_dishes_repository.delete_old_dishes(canteen_id)
 
         canteen = None
+        print(canteen_id)
         match canteen_id:
             case 1:
                 canteen = self.marburg_erlenring_parser
@@ -107,3 +109,7 @@ class CanteenService:
             result[canteens[i]] = self.parse_canteen(int(i))
         print(result)
         return result
+
+
+
+

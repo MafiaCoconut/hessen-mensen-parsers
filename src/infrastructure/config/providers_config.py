@@ -7,6 +7,6 @@ canteens_provider = CanteensDependencyProviderImpl(
     marburg_bistro=canteens_interfaces_provider.marburg_bistro,
     marburg_cafeteria=canteens_interfaces_provider.marburg_cafeteria,
     marburg_mo_diner=canteens_interfaces_provider.marburg_mo_diner,
-    giessen_thm=canteens_interfaces_provider.marburg_mo_diner,
+    giessen_thm=canteens_interfaces_provider.giessen_thm,
 )
 
