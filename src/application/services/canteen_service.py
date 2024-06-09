@@ -25,6 +25,7 @@ class CanteenService:
 
         self.get_canteen_use_case = GetCanteenUseCase(canteens_repository=canteens_repository)
         self.get_canteens_menu_use_case = GetCanteensMenuUseCase(
+            canteens_repository=canteens_repository,
             main_dishes_repository=self.main_dishes_repository,
             side_dishes_repository=self.side_dishes_repository,
             translation_service=translation_service
@@ -61,8 +62,8 @@ class CanteenService:
     def get_canteen(self, canteen_id: int):
         return self.get_canteen_use_case.get(canteen_id)
 
-    def get_menu(self, canteen_id: int):
-        return self.get_canteens_menu_use_case.execute(canteen_id)
+    def get_menu(self, canteen_id: int, locale: str):
+        return self.get_canteens_menu_use_case.execute(canteen_id, locale=locale)
 
     def parse_canteen(self, canteen_id: int):
         self.main_dishes_repository.delete_old_dishes(canteen_id)

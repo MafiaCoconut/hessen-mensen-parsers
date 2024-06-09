@@ -8,6 +8,9 @@ class CanteensOrm(Base):
 
     canteen_id: Mapped[intpk]
     name: Mapped[str] = mapped_column()
+    description: Mapped[str]
+    opened_time: Mapped[int]
+    closed_time: Mapped[int]
     created_at: Mapped[created_at]
 
 

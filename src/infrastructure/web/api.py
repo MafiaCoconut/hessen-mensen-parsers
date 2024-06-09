@@ -13,9 +13,9 @@ def read_canteens_menu(canteen_id: int):
 
 
 @router.get("/canteens_menu/{canteen_id}")
-def read_canteens_menu(canteen_id: int):
+def read_canteens_menu(canteen_id: int, locale: str):
 
-    return {"menu": canteens_service.get_menu(canteen_id=canteen_id)}
+    return canteens_service.get_menu(canteen_id=canteen_id, locale=locale)
 
 
 @router.get('/parser/all')

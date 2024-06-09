@@ -12,13 +12,13 @@ from infrastructure.db.models.side_dishes_orm import SideDishesOrm
 
 class MainDishesRepositoryImpl(MainDishesRepository):
     @staticmethod
-    def get(main_dish_id: int):
+    def get(main_dish_id: int) -> MainDish:
         with session_factory() as session:
             main_dish = session.get(MainDishesOrm, main_dish_id).first()
             return main_dish
 
     @staticmethod
-    def get_all_from_canteen(canteen_id: int):
+    def get_all_from_canteen(canteen_id: int) -> List[MainDish]:
         with session_factory() as session:
             query = (
                 select(MainDishesOrm)
@@ -31,7 +31,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
             return main_dishes
 
     @staticmethod
-    def get_all():
+    def get_all() -> List[MainDish]:
         with session_factory() as session:
             query = (select(MainDishesOrm))
             res = session.execute(query)

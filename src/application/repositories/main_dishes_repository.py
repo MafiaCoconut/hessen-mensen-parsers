@@ -7,17 +7,17 @@ from domain.entities.main_dish import MainDish
 class MainDishesRepository(ABC):
     @staticmethod
     @abstractmethod
-    def get(main_dish_id: int):
+    def get(main_dish_id: int) -> MainDish:
         pass
 
     @staticmethod
     @abstractmethod
-    def get_all_from_canteen(canteen_id: int):
+    def get_all_from_canteen(canteen_id: int) -> List[MainDish]:
         pass
 
     @staticmethod
     @abstractmethod
-    def get_all():
+    def get_all() -> List[MainDish]:
         pass
 
     @staticmethod
