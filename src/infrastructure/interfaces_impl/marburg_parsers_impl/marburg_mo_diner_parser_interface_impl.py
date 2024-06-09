@@ -40,8 +40,8 @@ class MarburgMoDinerParserInterfaceImpl(BaseMarburgParser):
     def get_list_of_dishes(self) -> list:
         elements = self.soup.find_all('tr', {
             'data-canteen': self.canteen_number,
-            'data-date': "2024-06-10",
-            # 'data-date': str(datetime.now())[:10],
+            # 'data-date': "2024-06-10",
+            'data-date': str(datetime.now())[:10],
         })
 
         items = []

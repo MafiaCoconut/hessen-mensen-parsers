@@ -28,6 +28,7 @@ class SchedulerInterfaceImpl(SchedulerInterface):
         self.set_parser_marburg_cafeteria()
         self.set_parser_marburg_mo_diner()
         self.set_parser_giessen_thm()
+        scheduler.start()
 
 
     def set_parser_marburg_erlenring(self):
@@ -50,6 +51,13 @@ class SchedulerInterfaceImpl(SchedulerInterface):
                           id="parser_mensa_erlenring_3",
                           hour=11, minute=43,
                           day_of_week='mon-fri',
+                          args=[1])
+
+        scheduler.add_job(self.canteen_service.parse_canteen,
+                          trigger='cron',
+                          id="parser_mensa_erlenring_4",
+                          hour=21, minute=22,
+                          # day_of_week='mon-fri',
                           args=[1])
 
     def set_parser_marburg_lahnberge(self):
