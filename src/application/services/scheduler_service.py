@@ -1,8 +1,8 @@
 # src/application/services/scheduler_service.py
 from datetime import datetime
 
-from application.scheduler.interfaces.scheduler_interface import SchedulerInterface
-from application.scheduler.usecases.set_all_scheduler_use_case import SetAllSchedulersJobsUseCase
+from application.interfaces.scheduler_interface import SchedulerInterface
+from application.use_cases.set_all_scheduler_use_case import SetAllSchedulersJobsUseCase
 from domain.entities.job import Job
 
 
