@@ -8,7 +8,7 @@ from infrastructure.config.db_config import db_settings
 from dotenv import load_dotenv
 
 import os
-load_dotenv()
+# load_dotenv()
 
 sync_engine = create_engine(
     url=db_settings.DATABASE_URL_psycopg,

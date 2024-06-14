@@ -2,7 +2,7 @@ import logging
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+# load_dotenv()
 system_logger = logging.getLogger('system_logging')
 user_logger = logging.getLogger('user_logging')
 mensa_logger = logging.getLogger('mensa')

@@ -36,6 +36,7 @@ class CanteensRepositoryImpl(CanteensRepository):
             canteen_orm = CanteensOrm(
                 canteen_id=canteen.canteen_id,
                 name=canteen.name,
+                description=canteen.description,
                 created_at=canteen.created_at
             )
             session.add(canteen_orm)

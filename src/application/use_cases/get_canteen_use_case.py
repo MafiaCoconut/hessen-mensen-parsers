@@ -7,7 +7,9 @@ class GetCanteenUseCase:
 
     def get(self, canteen_id: int):
         canteen = self.canteens_repository.get(canteen_id=canteen_id)
-        # TODO переделать на fluent
+        if canteen is None:
+            raise ValueError(f"Canteen with ID {canteen_id} does not exist.")
+
         text = "ID:{}\nНазвание: {}\n".format(
             canteen.canteen_id,
             canteen.name,

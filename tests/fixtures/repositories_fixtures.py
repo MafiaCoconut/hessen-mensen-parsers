@@ -16,4 +16,5 @@ def side_dishes_repository():
 
 @pytest.fixture
 def main_dishes_repository():
+
     return MainDishesRepositoryImpl()

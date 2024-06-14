@@ -25,13 +25,9 @@ class GetCanteensMenuUseCase:
         side_dishes = self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         canteen = self.canteens_repository.get(canteen_id)
 
-        # print(main_dishes)
-        # print(side_dishes)
-        # TODO  добавить красивый вывод текста через форматирование и translation_service
-        # return {"main_dishes": main_dishes, "side_dishes": side_dishes}
         result = {'menu': None,
                   'error': self.check_menu_errors(canteen=canteen, locale=locale, main_dishes=main_dishes)}
-        # ic(result)
+
 
         try:
             menu_text = ""
