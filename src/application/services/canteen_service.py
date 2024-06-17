@@ -7,6 +7,7 @@ from application.use_cases.get_canteen_use_case import GetCanteenUseCase
 from application.use_cases.get_canteens_menu_use_case import GetCanteensMenuUseCase
 from application.use_cases.parse_menu_use_case import ParseCanteensMenuUseCase
 from application.use_cases.save_menu_use_case import SaveMenuUseCase
+from domain.entities.canteen import Canteen
 
 
 class CanteenService:
@@ -59,11 +60,14 @@ class CanteenService:
     def giessen_thm_parser(self):
         return self.canteens_provider.get_giessen_thm_parser_interface()
 
-    def get_canteen(self, canteen_id: int):
-        return self.get_canteen_use_case.get(canteen_id)
+    def get_canteen_text(self, canteen_id: int) -> str:
+        return self.get_canteen_use_case.get_text(canteen_id=canteen_id)
+
+    def get_canteen_obj(self, canteen_id: int) -> Canteen:
+        return self.get_canteen_use_case.get_object(canteen_id=canteen_id)
 
     def get_menu(self, canteen_id: int, locale: str):
-        return self.get_canteens_menu_use_case.execute(canteen_id, locale=locale)
+        return self.get_canteens_menu_use_case.execute(canteen_id=canteen_id, locale=locale)
 
     def parse_canteen(self, canteen_id: int):
         self.main_dishes_repository.delete_old_dishes(canteen_id)

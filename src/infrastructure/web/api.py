@@ -9,7 +9,7 @@ router = APIRouter()
 @router.get("/canteens/{canteen_id}")
 def read_canteens(canteen_id: int):
     print("/canteens/{canteen_id}")
-    return {"text": canteens_service.get_canteen(canteen_id=canteen_id)}
+    return {"text": canteens_service.get_canteen_text(canteen_id=canteen_id)}
 
 
 @router.get("/canteens_menu/{canteen_id}")

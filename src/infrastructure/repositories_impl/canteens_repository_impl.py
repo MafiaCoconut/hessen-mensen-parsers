@@ -1,7 +1,7 @@
 from typing import List
 from fastapi import Depends
 from sqlalchemy.orm import Session
-from sqlalchemy import insert, select, update
+from sqlalchemy import insert, select, update, delete, text
 from application.repositories.canteens_repository import CanteensRepository
 from domain.entities.canteen import Canteen
 from infrastructure.db.base import sync_engine, session_factory
@@ -20,7 +20,6 @@ class CanteensRepositoryImpl(CanteensRepository):
     def get(self, canteen_id: int) -> Canteen:
         with session_factory() as session:
             canteen = session.get(CanteensOrm, canteen_id)
-
             return canteen
 
     # def update(self, canteen_id: int, canteen_name: str):
@@ -41,6 +40,16 @@ class CanteensRepositoryImpl(CanteensRepository):
             )
             session.add(canteen_orm)
             session.commit()
+
+    def delete_all(self) -> None:
+        with session_factory() as session:
+            # query = delete(CanteensOrm)
+            # session.execute(query)
+            session.execute(delete(CanteensOrm))
+            session.execute(text(f"ALTER SEQUENCE {CanteensOrm.__tablename__}_canteen_id_seq RESTART WITH 1;"))
+
+            session.commit()
+
 
 
 

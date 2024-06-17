@@ -13,10 +13,10 @@ from infrastructure.db.base import Base, sync_engine
 
 # Импорт фикстур
 from tests.fixtures.entities_fixtures import *
-# from tests.fixtures.databases_fixtures import *
-# from tests.fixtures.services_fixtures import *
-# from tests.fixtures.interfaces_fixtures import *
-# from tests.fixtures.repositories_fixtures import *
+from tests.fixtures.databases_fixtures import *
+from tests.fixtures.services_fixtures import *
+from tests.fixtures.interfaces_fixtures import *
+from tests.fixtures.repositories_fixtures import *
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_database():
@@ -24,10 +24,7 @@ def setup_database():
     Base.metadata.drop_all(sync_engine)
     Base.metadata.create_all(sync_engine)
 
-
     yield
-
-    print("&&&&&&& Dropping tables", Base.metadata.tables)
 
 
 

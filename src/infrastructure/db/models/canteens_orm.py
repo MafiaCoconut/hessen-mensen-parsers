@@ -15,7 +15,5 @@ class CanteensOrm(Base):
     closed_time: Mapped[int] = mapped_column(INTEGER, nullable=True)
     created_at: Mapped[created_at]
 
-print(3)
-print(Base.metadata.tables)
 
 

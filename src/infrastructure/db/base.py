@@ -38,5 +38,3 @@ session_factory = sessionmaker(sync_engine)
 class Base(DeclarativeBase):
     pass
 
-print(id(Base))
-print(2)

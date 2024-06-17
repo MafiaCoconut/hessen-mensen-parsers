@@ -1,7 +1,7 @@
 
-from src.domain.entities.main_dish import *
-from src.domain.entities.side_dish import *
-from src.domain.entities.canteen import *
+from domain.entities.main_dish import MainDish
+from domain.entities.side_dish import SideDish
+from domain.entities.canteen import Canteen
 import pytest
 
 

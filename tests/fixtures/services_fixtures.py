@@ -1,7 +1,7 @@
-from src.application.services.canteen_service import CanteenService
-from src.application.services.translation_service import TranslationService
-from src.application.services.scheduler_service import SchedulerService
-from src.application.services.set_all_schedulers_service import SetAllSchedulersJobsUseCase
+from application.services.canteen_service import CanteenService
+from application.services.translation_service import TranslationService
+from application.services.scheduler_service import SchedulerService
+from application.services.set_all_schedulers_service import SetAllSchedulersJobsUseCase
 
 
 import pytest
