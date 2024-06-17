@@ -18,3 +18,12 @@ class CanteensRepository(ABC):
     @abstractmethod
     def save(self, canteen: Canteen) -> None:
         pass
+
+    @abstractmethod
+    def delete_all(self) -> None:
+        pass
+
+    @abstractmethod
+    def delete(self, canteen_id: int) -> None:
+        pass
+

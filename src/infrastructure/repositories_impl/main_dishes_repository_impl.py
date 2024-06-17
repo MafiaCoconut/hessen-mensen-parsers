@@ -4,7 +4,7 @@ from application.repositories.main_dishes_repository import MainDishesRepository
 from domain.entities.main_dish import MainDish
 from infrastructure.db.base import sync_engine, session_factory, Base
 from infrastructure.db.models.main_dishes_orm import MainDishesOrm
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, text
 
 from infrastructure.db.models.canteens_orm import CanteensOrm
 from infrastructure.db.models.side_dishes_orm import SideDishesOrm
@@ -75,18 +75,12 @@ class MainDishesRepositoryImpl(MainDishesRepository):
             session.execute(query)
             session.commit()
 
+    @staticmethod
+    def delete_all() -> None:
+        with session_factory() as session:
+            session.execute(delete(MainDishesOrm))
+            session.execute(text(f"ALTER SEQUENCE {MainDishesOrm.__tablename__}_main_dish_id_seq RESTART WITH 1;"))
 
-# Base.metadata.create_all(sync_engine)
-# object_1 = MainDishesRepositoryImpl()
-# main_dish = MainDish(
-#     name="test",
-#     type="test",
-#     price="test",
-#     properties="test",
-#     canteen_id=1
-# )
-# object_1.save(main_dish)
-# print('-----------------------------')
-# object_1.get_all_from_canteen(1)
-# print('-----------------------')
-# object_1.get(1)
+            session.commit()
+
+

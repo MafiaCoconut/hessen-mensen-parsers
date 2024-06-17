@@ -4,7 +4,8 @@ from application.repositories.side_dishes_repository import SideDishesRepository
 from domain.entities.side_dish import SideDish
 from infrastructure.db.base import sync_engine, session_factory, Base
 from infrastructure.db.models.side_dishes_orm import SideDishesOrm
-from sqlalchemy import select, delete
+from sqlalchemy import select, delete, text
+
 
 class SideDishesRepositoryImpl(SideDishesRepository):
     @staticmethod
@@ -68,4 +69,12 @@ class SideDishesRepositoryImpl(SideDishesRepository):
                 .filter(SideDishesOrm.canteen_id == int(canteen_id))
             )
             session.execute(query)
+            session.commit()
+
+    @staticmethod
+    def delete_all() -> None:
+        with session_factory() as session:
+            session.execute(delete(SideDishesOrm))
+            session.execute(text(f"ALTER SEQUENCE {SideDishesOrm.__tablename__}_side_dish_id_seq RESTART WITH 1;"))
+
             session.commit()

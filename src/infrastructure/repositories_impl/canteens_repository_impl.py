@@ -8,6 +8,7 @@ from infrastructure.db.base import sync_engine, session_factory
 from infrastructure.db.models.canteens_orm import CanteensOrm
 from icecream import ic
 
+
 class CanteensRepositoryImpl(CanteensRepository):
     def get_all(self) -> List[Canteen]:
         with session_factory() as session:
@@ -21,13 +22,6 @@ class CanteensRepositoryImpl(CanteensRepository):
         with session_factory() as session:
             canteen = session.get(CanteensOrm, canteen_id)
             return canteen
-
-    # def update(self, canteen_id: int, canteen_name: str):
-    #     with session_factory() as session:
-    #         canteen = session.get(CanteensOrm, canteen_id)
-    #         canteen.name = canteen_name
-    #         session.commit()
-
 
     def save(self, canteen: Canteen = None) -> None:
         with session_factory() as session:
@@ -43,20 +37,19 @@ class CanteensRepositoryImpl(CanteensRepository):
 
     def delete_all(self) -> None:
         with session_factory() as session:
-            # query = delete(CanteensOrm)
-            # session.execute(query)
             session.execute(delete(CanteensOrm))
             session.execute(text(f"ALTER SEQUENCE {CanteensOrm.__tablename__}_canteen_id_seq RESTART WITH 1;"))
 
             session.commit()
 
 
+    def delete(self, canteen_id: int) -> None:
+        with session_factory() as session:
+            query = (
+                delete(CanteensOrm)
+                .filter(CanteensOrm.canteen_id == int(canteen_id))
+            )
+            session.execute(query)
+            session.commit()
 
 
-# canteen_repository = CanteensRepositoryImpl()
-# canteen = Canteen(canteen_id=8, name="dsfdsffs")
-# canteen_repository.save(canteen=canteen)
-
-# canteen_repository.get_all()
-# canteen_repository.get(canteen_id=1)
-# canteen_repository.update(canteen_id=7, canteen_name='тестовая столовая_1')

@@ -28,19 +28,3 @@ class TestCanteenService:
     def test_get_canteen_obj(self, canteen_id: int, locale: str, expectation, canteen_service, set_test_canteens):
         with expectation:
             assert isinstance(canteen_service.get_canteen_obj(canteen_id), Canteen)
-
-    # @pytest.mark.parametrize(
-    #     "canteen_id, locale, expectation",
-    #     [
-    #
-    #     ]
-    # )
-    # def test_get_menu(self, canteen_id: int,  locale: str, expectation, canteen_service):
-    #     with expectation:
-    #         assert isinstance(canteen_service.get_menu(canteen_id=canteen_id, locale=locale), str)
-    #
-    # def test_parse_canteen(self):
-    #     pass
-    #
-    # def test_parse_all_canteens(self):
-    #     pass
