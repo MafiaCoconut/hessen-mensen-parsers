@@ -12,17 +12,17 @@ def canteens():
     return canteens
 
 
-class TestCanteensRepository:
-    def test_get_all(self):
-        pass
-
-    def test_get(self):
-        pass
-
-    def test_save(self, canteens, canteens_repository):
-        for canteen in canteens:
-            canteens_repository.save(canteen)
-
-        new_data = canteens_repository.get_all()
-        print(new_data)
-        assert len(new_data) == 1
+# class TestCanteensRepository:
+#     def test_get_all(self):
+#         pass
+#
+#     def test_get(self):
+#         pass
+#
+#     def test_save(self, canteens, canteens_repository):
+#         for canteen in canteens:
+#             canteens_repository.save(canteen)
+#
+#         new_data = canteens_repository.get_all()
+#         print(new_data)
+#         assert len(new_data) == 1

@@ -33,7 +33,6 @@ class MarburgBistroParserInterfaceImpl(BaseMarburgParser):
                     menu['main_dishes'].append(result)
                 elif isinstance(result, SideDish):
                     menu['side_dishes'].append(result)
-        ic(menu)
         return menu
 
     def get_list_of_dishes(self) -> list:

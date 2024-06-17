@@ -20,21 +20,23 @@ sync_engine = create_engine(
     pool_pre_ping=True,
 )
 
-async_engine = create_async_engine(
-    url=db_settings.DATABASE_URL_asyncpg,
-    # echo=True,
-    pool_size=10,
-    max_overflow=20,
-    pool_timeout=30,
-    pool_recycle=1800,
-    pool_pre_ping=True,
-)
+# async_engine = create_async_engine(
+#     url=db_settings.DATABASE_URL_asyncpg,
+#     echo=True,
+    # pool_size=10,
+    # max_overflow=20,
+    # pool_timeout=30,
+    # pool_recycle=1800,
+    # pool_pre_ping=True,
+# )
 
 
 session_factory = sessionmaker(sync_engine)
-async_session_factory = async_sessionmaker(async_engine)
+# async_session_factory = async_sessionmaker(async_engine)
 
 
 class Base(DeclarativeBase):
     pass
 
+print(id(Base))
+print(2)

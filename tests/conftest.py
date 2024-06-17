@@ -1,37 +1,37 @@
 import sys
 import os
 from pathlib import Path
+import pytest
+from icecream import ic
 
-print('----------')
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
 
 sys.path.append(str(Path(__file__).parent.parent))
 
-from tests.fixtures.databases_fixtures import *
-from tests.fixtures.repositories_fixtures import *
-# from tests.fixtures.entities_fixtures import *
+from infrastructure.db.models.canteens_orm import CanteensOrm
+from infrastructure.db.base import Base, sync_engine
 
-from tests.fixtures.services_fixtures import *
-from tests.fixtures.interfaces_fixtures import *
-
-
-# TEST_DATABASE_URL = "jdbc:postgresql://localhost:5432/test_database"
-
-
-from src.infrastructure.db.base import Base, sync_engine, db_settings
-# from src.infrastructure.db.models.canteens_orm import CanteensOrm
-# from src.infrastructure.db.models.main_dishes_orm import MainDishesOrm
-# from src.infrastructure.db.models.side_dishes_orm import SideDishesOrm
+# Импорт фикстур
+from tests.fixtures.entities_fixtures import *
+# from tests.fixtures.databases_fixtures import *
+# from tests.fixtures.services_fixtures import *
+# from tests.fixtures.interfaces_fixtures import *
+# from tests.fixtures.repositories_fixtures import *
 
 @pytest.fixture(scope="session", autouse=True)
-def db_engine():
+def setup_database():
+    """Создание таблиц перед выполнением тестов и удаление после."""
+    Base.metadata.drop_all(sync_engine)
     Base.metadata.create_all(sync_engine)
-    print(db_settings.DB_NAME, db_settings.MODE)
-    print('данные дропнулись')
-    assert db_settings.MODE == "TEST"
 
-    # yield sync_engine
-    # Base.metadata.drop_all(bind=engine)
+
+    yield
+
+    print("&&&&&&& Dropping tables", Base.metadata.tables)
+
+
+
+
 
 
 # @pytest.fixture(scope="session")

@@ -30,4 +30,4 @@ class DBSettings(BaseSettings):
 
 db_settings = DBSettings()
 
-
+print(2)

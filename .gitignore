@@ -163,3 +163,5 @@ cython_debug/
 src/geckodriver
 src/test.py
 test.py
+.env
+.test.env

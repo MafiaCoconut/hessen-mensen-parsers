@@ -1,9 +1,17 @@
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from src.infrastructure.db.base import Base
+from infrastructure.db.base import Base
+
+from infrastructure.db.base import sync_engine
 
 
+@pytest.fixture(scope="session")
+def db_session():
+    Session = sessionmaker(bind=sync_engine)
+    session = Session()
+    yield session
+    session.close()
 
 
 @pytest.fixture(scope="function")
