@@ -12,11 +12,12 @@ from infrastructure.db.models.canteens_orm import CanteensOrm
 from infrastructure.db.base import Base, sync_engine
 
 # Импорт фикстур
-from tests.fixtures.entities_fixtures import *
-from tests.fixtures.databases_fixtures import *
-from tests.fixtures.services_fixtures import *
-from tests.fixtures.interfaces_fixtures import *
-from tests.fixtures.repositories_fixtures import *
+import tests.fixtures.entities_fixtures
+import tests.fixtures.databases_fixtures
+import tests.fixtures.services_fixtures
+import tests.fixtures.interfaces_fixtures
+import tests.fixtures.repositories_fixtures
+
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_database():

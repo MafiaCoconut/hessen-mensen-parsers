@@ -8,6 +8,7 @@ from infrastructure.repositories_impl.main_dishes_repository_impl import MainDis
 
 import pytest
 
+
 @pytest.fixture
 def canteens_repository():
     return CanteensRepositoryImpl()

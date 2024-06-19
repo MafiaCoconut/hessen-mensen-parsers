@@ -11,6 +11,7 @@ from infrastructure.providers_impl.canteens_provider_impl import CanteensDepende
 
 import pytest
 
+
 @pytest.fixture
 def giessen_thm_interface():
     return GiessenTHMParserInterfaceImpl()

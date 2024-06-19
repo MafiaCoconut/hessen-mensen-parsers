@@ -3,8 +3,8 @@ from application.services.translation_service import TranslationService
 from application.services.scheduler_service import SchedulerService
 from application.services.set_all_schedulers_service import SetAllSchedulersJobsUseCase
 
-
 import pytest
+
 
 @pytest.fixture
 def canteen_service(canteens_repository, main_dishes_repository, side_dishes_repository, canteens_provider, translation_service):

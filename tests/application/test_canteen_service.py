@@ -28,3 +28,5 @@ class TestCanteenService:
     def test_get_canteen_obj(self, canteen_id: int, locale: str, expectation, canteen_service, set_test_canteens):
         with expectation:
             assert isinstance(canteen_service.get_canteen_obj(canteen_id), Canteen)
+
+
