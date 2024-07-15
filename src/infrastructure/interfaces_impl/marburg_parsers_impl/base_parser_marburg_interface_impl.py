@@ -36,5 +36,6 @@ class BaseMarburgParser(BaseParser):
             side_dish.properties = dish[1]
         else:
             side_dish.properties = self.is_vegan_or_is_sweet(dish[0])
-
+        side_dish.type = "-"
+        side_dish.price = "-"
         return side_dish

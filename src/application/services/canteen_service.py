@@ -7,6 +7,7 @@ from application.use_cases.get_canteen_use_case import GetCanteenUseCase
 from application.use_cases.get_canteens_menu_use_case import GetCanteensMenuUseCase
 from application.use_cases.parse_menu_use_case import ParseCanteensMenuUseCase
 from application.use_cases.save_menu_use_case import SaveMenuUseCase
+from application.validators.dishes_validator import DishesValidator
 from domain.entities.canteen import Canteen
 from domain.entities.main_dish import MainDish
 from domain.entities.side_dish import SideDish
@@ -18,13 +19,15 @@ class CanteenService:
                  main_dishes_repository: MainDishesRepository,
                  side_dishes_repository: SideDishesRepository,
                  canteens_provider: CanteensDependencyProvider,
-                 translation_service: TranslationService
+                 translation_service: TranslationService,
+                 dishes_validator: DishesValidator
                  ):
         self.canteens_repository = canteens_repository
         self.main_dishes_repository = main_dishes_repository
         self.side_dishes_repository = side_dishes_repository
         self.canteens_provider = canteens_provider
         self.translation_service = translation_service
+        self.dishes_validator = dishes_validator
 
         self.get_canteen_use_case = GetCanteenUseCase(
             canteens_repository=canteens_repository,
@@ -39,7 +42,8 @@ class CanteenService:
         )
         self.save_canteens_menu_use_case = SaveMenuUseCase(
             main_dishes_repository=self.main_dishes_repository,
-            side_dishes_repository=self.side_dishes_repository
+            side_dishes_repository=self.side_dishes_repository,
+            dishes_validator=self.dishes_validator
         )
 
     @property

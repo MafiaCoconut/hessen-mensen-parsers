@@ -17,7 +17,7 @@ from tests.fixtures.databases_fixtures import *
 from tests.fixtures.services_fixtures import *
 from tests.fixtures.interfaces_fixtures import *
 from tests.fixtures.repositories_fixtures import *
-
+from tests.fixtures.validators_fixtures import *
 
 
 @pytest.fixture(scope="session", autouse=True)

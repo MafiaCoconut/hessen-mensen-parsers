@@ -78,17 +78,30 @@ def canteens_menu_with_different_canteens_id():
     )
 
 
-# @pytest.fixture()
-# def canteens():
-#     return [
-#         Canteen(canteen_id=1, name="Mensa Erlenring", opened_time=690, closed_time=855, description="---"),
-#         Canteen(canteen_id=2, name="Mensa Lahnberge", opened_time=690, closed_time=85, description="---"),
-#         Canteen(canteen_id=3, name="Bistro", opened_time=540, closed_time=1140, description="---"),
-#         Canteen(canteen_id=4, name="Cafeteria Lahnberge", opened_time=480, closed_time=1020, description="---"),
-#         Canteen(canteen_id=5, name="Mo's Dinner", opened_time=510, closed_time=720, description="---"),
-#         Canteen(canteen_id=6, name="THM", description="---"),
-#         Canteen(canteen_id=7, name="тестовая столовая_1",description="---"),
-#
-#
-#     ]
+@pytest.fixture()
+def real_canteens():
+    return [
+        Canteen(canteen_id=1, name="Mensa Erlenring", opened_time=690, closed_time=855, description="---"),
+        Canteen(canteen_id=2, name="Mensa Lahnberge", opened_time=690, closed_time=85, description="---"),
+        Canteen(canteen_id=3, name="Bistro", opened_time=540, closed_time=1140, description="---"),
+        Canteen(canteen_id=4, name="Cafeteria Lahnberge", opened_time=480, closed_time=1020, description="---"),
+        Canteen(canteen_id=5, name="Mo's Dinner", opened_time=510, closed_time=720, description="---"),
+        Canteen(canteen_id=6, name="THM", description="---"),
+        Canteen(canteen_id=7, name="тестовая столовая_1",description="---"),
+
+
+    ]
+
+
+
+@pytest.fixture
+def test_canteens():
+    return [
+        Canteen(name="Тестовая столовая 1", description="Qwerty", opened_time=123, closed_time=345),
+        Canteen(name="Тестовая столовая 2", description="Ytrewq", opened_time=456, closed_time=857),
+        Canteen(name="Тестовая столовая 3", description="asdfgh", opened_time=987, closed_time=258),
+    ]
+
+
+
 

@@ -36,7 +36,7 @@ class SideDishesRepositoryImpl(SideDishesRepository):
     @staticmethod
     def save(side_dish: SideDish):
         with session_factory() as session:
-            side_dish = SideDish(
+            side_dish = SideDishesOrm(
                 name=side_dish.name,
                 type=side_dish.type,
                 price=side_dish.price,
@@ -47,9 +47,9 @@ class SideDishesRepositoryImpl(SideDishesRepository):
             session.commit()
 
     @staticmethod
-    def save_many(main_dishes: List[SideDish]):
+    def save_many(side_dishes: List[SideDish]):
         with session_factory() as session:
-            for dish in main_dishes:
+            for dish in side_dishes:
                 main_dish = SideDishesOrm(
                     name=dish.name,
                     type=dish.type,
