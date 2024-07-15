@@ -15,7 +15,13 @@ class SaveMenuUseCase:
         self.side_dish_repository = side_dishes_repository
 
     def execute(self, main_dishes: List[MainDish], side_dishes: List[SideDish]):
-        self.main_dish_repository.save_many(main_dishes)
-        self.side_dish_repository.save_many(side_dishes)
+        if all(dish.canteen_id == main_dishes[0].canteen_id for dish in main_dishes) if main_dishes else True:
+            self.main_dish_repository.save_many(main_dishes)
+        else:
+            ValueError("Переданы предметы main_dishes из разных столовых")
 
+        if all(dish.canteen_id == side_dishes[0].canteen_id for dish in side_dishes) if side_dishes else True:
+            self.side_dish_repository.save_many(side_dishes)
+        else:
+            ValueError("Переданы предметы side_dishes из разных столовых")
 

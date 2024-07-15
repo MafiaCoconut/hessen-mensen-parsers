@@ -41,6 +41,7 @@ def marburg_bistro_interface():
 def marburg_mo_diner_interface():
     return MarburgMoDinerParserInterfaceImpl()
 
+
 @pytest.fixture
 def canteens_provider(
         marburg_erlenring_interface,
@@ -48,7 +49,8 @@ def canteens_provider(
         marburg_bistro_interface,
         marburg_cafeteria_interface,
         marburg_mo_diner_interface,
-        giessen_thm_interface):
+        giessen_thm_interface
+):
     provider = CanteensDependencyProviderImpl(
         marburg_erlenring=marburg_erlenring_interface,
         marburg_lahnberge=marburg_lahnberge_interface,
@@ -63,3 +65,5 @@ def canteens_provider(
 @pytest.fixture
 def translation_service():
     return TranslationService()
+
+

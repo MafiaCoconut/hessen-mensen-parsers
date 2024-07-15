@@ -5,9 +5,9 @@ from application.services.set_all_schedulers_service import SetAllSchedulersJobs
 
 import pytest
 
-
 @pytest.fixture
 def canteen_service(canteens_repository, main_dishes_repository, side_dishes_repository, canteens_provider, translation_service):
+
     canteen_service = CanteenService(
         canteens_repository=canteens_repository,
         main_dishes_repository=main_dishes_repository,

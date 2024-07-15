@@ -12,11 +12,12 @@ from infrastructure.db.models.canteens_orm import CanteensOrm
 from infrastructure.db.base import Base, sync_engine
 
 # Импорт фикстур
-import tests.fixtures.entities_fixtures
-import tests.fixtures.databases_fixtures
-import tests.fixtures.services_fixtures
-import tests.fixtures.interfaces_fixtures
-import tests.fixtures.repositories_fixtures
+from tests.fixtures.entities_fixtures import *
+from tests.fixtures.databases_fixtures import *
+from tests.fixtures.services_fixtures import *
+from tests.fixtures.interfaces_fixtures import *
+from tests.fixtures.repositories_fixtures import *
+
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -26,7 +27,6 @@ def setup_database():
     Base.metadata.create_all(sync_engine)
 
     yield
-
 
 
 

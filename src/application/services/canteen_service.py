@@ -8,6 +8,8 @@ from application.use_cases.get_canteens_menu_use_case import GetCanteensMenuUseC
 from application.use_cases.parse_menu_use_case import ParseCanteensMenuUseCase
 from application.use_cases.save_menu_use_case import SaveMenuUseCase
 from domain.entities.canteen import Canteen
+from domain.entities.main_dish import MainDish
+from domain.entities.side_dish import SideDish
 
 
 class CanteenService:
@@ -24,7 +26,11 @@ class CanteenService:
         self.canteens_provider = canteens_provider
         self.translation_service = translation_service
 
-        self.get_canteen_use_case = GetCanteenUseCase(canteens_repository=canteens_repository)
+        self.get_canteen_use_case = GetCanteenUseCase(
+            canteens_repository=canteens_repository,
+            main_dishes_repository=self.main_dishes_repository,
+            side_dishes_repository=self.side_dishes_repository
+        )
         self.get_canteens_menu_use_case = GetCanteensMenuUseCase(
             canteens_repository=canteens_repository,
             main_dishes_repository=self.main_dishes_repository,
@@ -112,6 +118,19 @@ class CanteenService:
             result[canteens[i]] = self.parse_canteen(int(i))
         return result
 
+    def delete_main_dishes(self, canteen_id):
+        self.main_dishes_repository.delete_old_dishes(canteen_id)
 
+    def delete_side_dishes(self, canteen_id):
+        self.side_dishes_repository.delete_old_dishes(canteen_id)
 
+    def get_main_dishes_obj(self, canteen_id):
+        main_dishes = self.get_canteen_use_case.get_main_dishes_obj(canteen_id)
+        return main_dishes
 
+    def get_side_dishes_obj(self, canteen_id):
+        side_dishes = self.get_canteen_use_case.get_side_dishes_obj(canteen_id)
+        return side_dishes
+
+    def save_menu(self, main_dishes: list[MainDish], side_dishes: list[SideDish]):
+        self.save_canteens_menu_use_case.execute(main_dishes=main_dishes, side_dishes=side_dishes)

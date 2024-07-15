@@ -29,4 +29,17 @@ class TestCanteenService:
         with expectation:
             assert isinstance(canteen_service.get_canteen_obj(canteen_id), Canteen)
 
+    # @pytest.mark.parametrize(
+    #     ""
+    # )
+    # def test_get_main_dishes_obj(self, canteen_id: int, expectation, canteen_service,
+    #                              test_main_dishes, test_side_dishes):
+    #     canteen_service.save_main_dishes(test_main_dishes)
+    #     canteen_service.save_side_dishes(test_side_dishes)
+    #
+    #     main_dishes_obj: list = canteen_service.get_main_dishes_obj(canteen_id=canteen_id)
+    #     side_dishes_obj: list = canteen_service.get_side_dishes_obj(canteen_id=canteen_id)
+    #
+    #     for i, main_dish_obj in enumerate(main_dishes_obj):
+    #         assert True
 
