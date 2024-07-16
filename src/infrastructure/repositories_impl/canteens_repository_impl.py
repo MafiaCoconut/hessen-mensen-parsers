@@ -29,6 +29,8 @@ class CanteensRepositoryImpl(CanteensRepository):
             canteen_orm = CanteensOrm(
                 canteen_id=canteen.canteen_id,
                 name=canteen.name,
+                opened_time=canteen.opened_time,
+                closed_time=canteen.closed_time,
                 description=canteen.description,
                 created_at=canteen.created_at
             )

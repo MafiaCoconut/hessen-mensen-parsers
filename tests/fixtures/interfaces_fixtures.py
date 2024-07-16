@@ -64,6 +64,6 @@ def canteens_provider(
 
 @pytest.fixture
 def translation_service():
-    return TranslationService()
+    return TranslationService(status="Tests")
 
 

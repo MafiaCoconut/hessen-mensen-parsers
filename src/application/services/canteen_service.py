@@ -76,8 +76,9 @@ class CanteenService:
     def get_canteen_obj(self, canteen_id: int) -> Canteen:
         return self.get_canteen_use_case.get_object(canteen_id=canteen_id)
 
-    def get_menu(self, canteen_id: int, locale: str):
-        return self.get_canteens_menu_use_case.execute(canteen_id=canteen_id, locale=locale)
+    def get_menu(self, canteen_id: int, locale: str, test_time=None, test_day=None) -> dict:
+        return self.get_canteens_menu_use_case.execute(canteen_id=canteen_id, locale=locale,
+                                                       test_time=test_time, test_day=test_day)
 
     def parse_canteen(self, canteen_id: int):
         self.main_dishes_repository.delete_old_dishes(canteen_id)

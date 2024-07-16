@@ -5,6 +5,7 @@ from application.services.translation_service import TranslationService
 from datetime import datetime
 from icecream import ic
 
+from application.use_cases.errors import MenuErrorCodes
 from domain.entities.canteen import Canteen
 
 
@@ -20,14 +21,15 @@ class GetCanteensMenuUseCase:
         self.side_dishes_repository = side_dishes_repository
         self.translation_service = translation_service
 
-    def execute(self, canteen_id: int, locale: str):
+    def execute(self, canteen_id: int, locale: str, test_time=None, test_day=None) -> dict:
         main_dishes = self.main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         side_dishes = self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         canteen = self.canteens_repository.get(canteen_id)
 
         result = {'menu': None,
-                  'error': self.check_menu_errors(canteen=canteen, locale=locale, main_dishes=main_dishes)}
-
+                  'error': self.check_menu_errors(canteen=canteen, locale=locale,
+                                                  main_dishes=main_dishes,
+                                                  test_time=test_time, test_day=test_day)}
 
         try:
             menu_text = ""
@@ -41,23 +43,41 @@ class GetCanteensMenuUseCase:
             pass
         return result
 
-
-    def check_menu_errors(self, canteen: Canteen, locale: str, main_dishes: list):
+    def check_menu_errors(self, canteen: Canteen, locale: str, main_dishes: list,
+                          test_time: int | None, test_day: int | None):
         weekday = int(datetime.now().isoweekday())
         error_text = ""
         error_type = ""
 
-        if not (canteen.opened_time <= datetime.now().hour * 60 + datetime.now().minute <= canteen.closed_time) or \
-           not (1 <= weekday <= 5):
-            error_type = 'canteen-closed'
+        if test_time is not None:
+            if not (canteen.opened_time <= test_time <= canteen.closed_time):
+                error_type = MenuErrorCodes.CANTEEN_IS_CLOSED
+                error_text += self.translation_service.translate(
+                    message_id='canteens-open-time',
+                    locale=locale,
+                    canteen_name=canteen.name)
+                error_text += '\n' + canteen.description
+
+            elif test_day is not None:
+                if not (1 <= test_day <= 5):
+                    error_type = MenuErrorCodes.CANTEEN_IS_CLOSED
+                    error_text += self.translation_service.translate(
+                        message_id='canteens-open-time',
+                        locale=locale,
+                        canteen_name=canteen.name)
+                    error_text += '\n' + canteen.description
+
+        elif not (canteen.opened_time <= datetime.now().hour * 60 + datetime.now().minute <= canteen.closed_time) or \
+                not (1 <= weekday <= 5):
+            error_type = MenuErrorCodes.CANTEEN_IS_CLOSED
             error_text += self.translation_service.translate(
                 message_id='canteens-open-time',
                 locale=locale,
                 canteen_name=canteen.name)
             error_text += '\n' + canteen.description
 
-        elif not main_dishes:
-            error_type = 'menu-is-None'
+        if not main_dishes:
+            error_type = MenuErrorCodes.MENU_IS_NONE
             error_text += self.translation_service.translate(
                 message_id='no-menu-for-today',
                 locale=locale,
@@ -102,7 +122,7 @@ class GetCanteensMenuUseCase:
                 last_type_of_dish = dish.type
 
             dish_text += f"* {dish.name}\n"
-            if dish.properties != 'None':
+            if dish.properties != '-':
                 dish_text += f"- {dish.properties}\n"
             dish_text += f"= {dish.price}\n\n"
 
@@ -125,9 +145,9 @@ class GetCanteensMenuUseCase:
                 # name_dish = side_dish[1]
                 # properties = side_dish[2]
                 side_dish_text = f"* {side_dish.name}\n"
-                if side_dish.properties != 'None':
+                if side_dish.properties != '-':
                     side_dish_text += f"- {side_dish.properties}\n"
-                if side_dish.price != 'None':
+                if side_dish.price != '-':
                     side_dish_text += f"= {side_dish.price}\n"
 
                 text += side_dish_text + '\n'

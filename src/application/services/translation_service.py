@@ -3,17 +3,22 @@ from icecream import ic
 
 
 class TranslationService:
-    def __init__(self):
+    def __init__(self, status='Production'):
         # self.locales = locales
         # self.loader = FluentResourceLoader("../../infrastructure/locales/{locale}")
-        self.loader = FluentResourceLoader("infrastructure/locales/{locale}")
         # print(self.loader.localize_path())
         # self.loader.localize_path()
+        if status == "Production":
+            self.loader = FluentResourceLoader("infrastructure/locales/{locale}")
+        elif status == "Tests":
+            self.loader = FluentResourceLoader("src/infrastructure/locales/{locale}")
+
         self.l10n = {
             'en': FluentLocalization(["en"], ["base_en.ftl"], self.loader),
             'ru': FluentLocalization(["ru"], ["base_ru.ftl"], self.loader),
             'uk': FluentLocalization(["uk"], ["base_uk.ftl"], self.loader),
-            'de': FluentLocalization(["de"], ["base_de.ftl"], self.loader)
+            'de': FluentLocalization(["de"], ["base_de.ftl"], self.loader),
+            'ar': FluentLocalization(["ar"], ["base_ar.ftl"], self.loader),
         }
 
     def translate(self, message_id: str, locale: str, **kwargs):
@@ -21,10 +26,12 @@ class TranslationService:
             translation = self.l10n[locale].format_value(message_id, kwargs)
             if translation == message_id:
                 print(f"Message ID '{message_id}' not found for locale '{locale}'.")
+                raise ValueError(f"Message ID '{message_id}' not found for locale '{locale}'.")
             return translation
         else:
             print(f"Locale '{locale}' not supported.")
-            return f"[{message_id}]"
+            raise ValueError(f"Locale '{locale}' not supported.")
+            # return f"[{message_id}]"
 
     # def translate(self, message_id: str, locale: str, **kwargs):
     #
