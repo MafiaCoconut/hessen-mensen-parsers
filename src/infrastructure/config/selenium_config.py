@@ -6,7 +6,8 @@ from selenium.webdriver.firefox.service import Service
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
-
+from dotenv import load_dotenv
+load_dotenv()
 
 def get_selenium_driver():
     FF_OPTIONS = [
@@ -46,7 +47,7 @@ def get_selenium_driver():
     elif os.getenv("DEVICE") == "Raspberry" or os.getenv("DEVICE") == "RaspberryTest":
         geckodriver_path = "/app/geckodriver"
     else:
-        raise Exception("Неправильный ENV DEVICE")
+        raise Exception(f"Неправильный ENV DEVICE.Текущий - {os.getenv("DEVICE")} ")
 
     [options.add_argument(opt) for opt in FF_OPTIONS]
     [options.set_preference(key, value) for key, value in SET_PREF.items()]

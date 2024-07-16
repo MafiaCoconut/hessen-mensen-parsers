@@ -1,9 +1,14 @@
 from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
-
 from infrastructure.config.canteen_service_config import canteens_service
+from infrastructure.interfaces_impl.errors import ParserErrorCodes
 
 router = APIRouter()
+
+
+@router.get("/")
+def read_root():
+    return {"message": "Hello, World!"}
 
 
 @router.get("/canteens/{canteen_id}")
@@ -27,7 +32,12 @@ def start_all_canteens_parser():
 @router.get('/parser/{canteen_id}')
 def start_canteens_parser(canteen_id: int):
     print("start_canteens_parser")
-    return canteens_service.parse_canteen(canteen_id=int(canteen_id))
+    result = canteens_service.parse_canteen(canteen_id=int(canteen_id))
+
+    if result.get('error') == ParserErrorCodes.NO_DATA_ON_WEBSITE:
+        return {"error": ParserErrorCodes.NO_DATA_ON_WEBSITE.name}
+    else:
+        return canteens_service.parse_canteen(canteen_id=int(canteen_id))
 
 
 # @router.get('/start')

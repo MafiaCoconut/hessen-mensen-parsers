@@ -7,6 +7,8 @@ from domain.entities.side_dish import SideDish
 
 from selenium.webdriver.common.by import By
 
+from infrastructure.interfaces_impl.errors import ParserErrorCodes
+
 
 class GiessenTHMParserInterfaceImpl(BaseParser):
     def __init__(self):
@@ -45,7 +47,11 @@ class GiessenTHMParserInterfaceImpl(BaseParser):
                 # пропуск бесполезной Pastaria
                 continue
 
-            container = self.driver.find_element(By.XPATH, f"/html/body/div[2]/main[2]/div[1]/div/div/div/div[5]/div/div/div[3]/div[{container_nummer}]")
+            try:
+                container = self.driver.find_element(By.XPATH, f"/html/body/div[2]/main[2]/div[1]/div/div/div/div[5]/div/div/div[3]/div[{container_nummer}]")
+            except:
+                result['error'] = ParserErrorCodes.NO_DATA_ON_WEBSITE
+                break
             items = container.text.split('\n')
             type_of_items = items[0].replace('/', '')
             items = items[2:]

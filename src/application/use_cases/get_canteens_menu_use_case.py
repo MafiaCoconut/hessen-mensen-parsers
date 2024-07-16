@@ -1,3 +1,5 @@
+import logging
+
 from application.repositories.canteens_repository import CanteensRepository
 from application.repositories.main_dishes_repository import MainDishesRepository
 from application.repositories.side_dishes_repository import SideDishesRepository
@@ -30,7 +32,7 @@ class GetCanteensMenuUseCase:
                   'error': self.check_menu_errors(canteen=canteen, locale=locale,
                                                   main_dishes=main_dishes,
                                                   test_time=test_time, test_day=test_day)}
-
+        logging.info(result)
         try:
             menu_text = ""
             menu_text += self.get_header(canteen=canteen, locale=locale, created_at=main_dishes[0].created_at)
