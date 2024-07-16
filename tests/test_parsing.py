@@ -1,7 +1,5 @@
 import pytest
 
-
-@pytest.mark.parsing
 @pytest.mark.usefixtures("canteen_service", "set_real_canteens")
 class TestParseCanteens:
     @staticmethod
