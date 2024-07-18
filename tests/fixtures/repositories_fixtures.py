@@ -47,7 +47,7 @@ def set_real_canteens(real_canteens, canteens_repository):
 
     yield
 
-    time.sleep(3)
+    # time.sleep(3)
     canteens_repository.delete_all()
     logging.info("Реальные столовые удалены из бд")
 
@@ -60,7 +60,7 @@ def set_test_main_dishes(main_dishes, main_dishes_repository):
 
     yield
 
-    time.sleep(3)
+    # time.sleep(3)
     main_dishes_repository.delete_all()
     print("\nДанные удалены\n")
 

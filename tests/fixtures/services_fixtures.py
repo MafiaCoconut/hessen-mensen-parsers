@@ -21,6 +21,12 @@ def canteen_service(
     )
     return canteen_service
 
+
+@pytest.fixture
+def translation_service():
+    return TranslationService(status="Tests")
+
+
 # @pytest.fixture
 # def scheduler_service(scheduler_interface):
 #     return SchedulerService(scheduler_interface)
