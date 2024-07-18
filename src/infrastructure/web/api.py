@@ -12,15 +12,15 @@ def read_root():
 
 
 @router.get("/canteens/{canteen_id}")
-def read_canteens(canteen_id: int):
+def read_canteens(canteen_id: str):
     print("/canteens/{canteen_id}")
-    return {"text": canteens_service.get_canteen_text(canteen_id=canteen_id)}
+    return {"text": canteens_service.get_canteen_text(canteen_id=int(canteen_id))}
 
 
 @router.get("/canteens_menu/{canteen_id}")
-def read_canteens_menu(canteen_id: int, locale: str):
+def read_canteens_menu(canteen_id: str, locale: str):
     print("read_canteens_menu")
-    return canteens_service.get_menu(canteen_id=canteen_id, locale=locale)
+    return canteens_service.get_menu(canteen_id=int(canteen_id), locale=locale)
 
 
 @router.get('/parser/all')
@@ -30,7 +30,7 @@ def start_all_canteens_parser():
 
 
 @router.get('/parser/{canteen_id}')
-def start_canteens_parser(canteen_id: int):
+def start_canteens_parser(canteen_id: str):
     print("start_canteens_parser")
     result = canteens_service.parse_canteen(canteen_id=int(canteen_id))
 
