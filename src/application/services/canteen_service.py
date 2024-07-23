@@ -76,9 +76,8 @@ class CanteenService:
     async def get_canteen_obj(self, canteen_id: int) -> Canteen:
         return await self.get_canteen_use_case.get_object(canteen_id=canteen_id)
 
-    async def get_menu(self, canteen_id: int, locale: str, test_time=None, test_day=None) -> dict:
-        return await self.get_canteens_menu_use_case.execute(canteen_id=canteen_id, locale=locale,
-                                                       test_time=test_time, test_day=test_day)
+    async def get_canteens_dishes(self, canteen_id: int) -> dict:
+        return await self.get_canteens_menu_use_case.execute(canteen_id=canteen_id)
 
     async def parse_canteen(self, canteen_id: int):
         await self.main_dishes_repository.delete_old_dishes(canteen_id)

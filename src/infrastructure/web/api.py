@@ -13,14 +13,17 @@ async def read_root():
 
 @router.get("/canteens/{canteen_id}")
 async def read_canteens(canteen_id: str):
-    print("/canteens/{canteen_id}")
     return {"text": await canteens_service.get_canteen_text(canteen_id=int(canteen_id))}
 
 
 @router.get("/canteens_menu/{canteen_id}")
-async def read_canteens_menu(canteen_id: str, locale: str):
-    print("read_canteens_menu")
-    return await canteens_service.get_menu(canteen_id=int(canteen_id), locale=locale)
+async def read_canteens_menu(canteen_id: str):
+    """
+    Функция возвращает информацию о текущих блюдах столовой
+    :param canteen_id: Id столовой в базе данных
+    :return: {'main_dishes': list[MainDish], 'side_dishes': side_dishes[SideDishes], 'canteen_name': str}
+    """
+    return await canteens_service.get_canteens_dishes(canteen_id=int(canteen_id))
 
 
 @router.post('/parser/all')
@@ -40,6 +43,3 @@ async def start_canteens_parser(canteen_id: str):
         return result
 
 
-# @router.get('/start')
-# def start_canteens_parser():
-#     return {"Hello world"}
