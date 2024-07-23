@@ -70,19 +70,19 @@ class CanteenService:
     def giessen_thm_parser(self):
         return self.canteens_provider.get_giessen_thm_parser_interface()
 
-    def get_canteen_text(self, canteen_id: int) -> str:
-        return self.get_canteen_use_case.get_text(canteen_id=canteen_id)
+    async def get_canteen_text(self, canteen_id: int) -> str:
+        return await self.get_canteen_use_case.get_text(canteen_id=canteen_id)
 
-    def get_canteen_obj(self, canteen_id: int) -> Canteen:
-        return self.get_canteen_use_case.get_object(canteen_id=canteen_id)
+    async def get_canteen_obj(self, canteen_id: int) -> Canteen:
+        return await self.get_canteen_use_case.get_object(canteen_id=canteen_id)
 
-    def get_menu(self, canteen_id: int, locale: str, test_time=None, test_day=None) -> dict:
-        return self.get_canteens_menu_use_case.execute(canteen_id=canteen_id, locale=locale,
+    async def get_menu(self, canteen_id: int, locale: str, test_time=None, test_day=None) -> dict:
+        return await self.get_canteens_menu_use_case.execute(canteen_id=canteen_id, locale=locale,
                                                        test_time=test_time, test_day=test_day)
 
-    def parse_canteen(self, canteen_id: int):
-        self.main_dishes_repository.delete_old_dishes(canteen_id)
-        self.side_dishes_repository.delete_old_dishes(canteen_id)
+    async def parse_canteen(self, canteen_id: int):
+        await self.main_dishes_repository.delete_old_dishes(canteen_id)
+        await self.side_dishes_repository.delete_old_dishes(canteen_id)
 
         canteen = None
         match canteen_id:
@@ -102,13 +102,13 @@ class CanteenService:
         parse_canteen_menu_use_case = ParseCanteensMenuUseCase(canteen)
         result = parse_canteen_menu_use_case.execute()
 
-        self.save_canteens_menu_use_case.execute(
+        await self.save_canteens_menu_use_case.execute(
             main_dishes=result['main_dishes'], side_dishes=result['side_dishes']
         )
 
         return result
 
-    def parse_all_canteens(self):
+    async def parse_all_canteens(self):
         canteens = {
             '1': "erlenring",
             '2': "lahnberge",
@@ -123,19 +123,19 @@ class CanteenService:
             result[canteens[i]] = self.parse_canteen(int(i))
         return result
 
-    def delete_main_dishes(self, canteen_id):
-        self.main_dishes_repository.delete_old_dishes(canteen_id)
+    async def delete_main_dishes(self, canteen_id):
+        await self.main_dishes_repository.delete_old_dishes(canteen_id)
 
-    def delete_side_dishes(self, canteen_id):
-        self.side_dishes_repository.delete_old_dishes(canteen_id)
+    async def delete_side_dishes(self, canteen_id):
+        await self.side_dishes_repository.delete_old_dishes(canteen_id)
 
-    def get_main_dishes_obj(self, canteen_id):
-        main_dishes = self.get_canteen_use_case.get_main_dishes_obj(canteen_id)
+    async def get_main_dishes_obj(self, canteen_id):
+        main_dishes = await self.get_canteen_use_case.get_main_dishes_obj(canteen_id)
         return main_dishes
 
-    def get_side_dishes_obj(self, canteen_id):
-        side_dishes = self.get_canteen_use_case.get_side_dishes_obj(canteen_id)
+    async def get_side_dishes_obj(self, canteen_id):
+        side_dishes = await self.get_canteen_use_case.get_side_dishes_obj(canteen_id)
         return side_dishes
 
-    def save_menu(self, main_dishes: list[MainDish], side_dishes: list[SideDish]):
-        self.save_canteens_menu_use_case.execute(main_dishes=main_dishes, side_dishes=side_dishes)
+    async def save_menu(self, main_dishes: list[MainDish], side_dishes: list[SideDish]):
+        await self.save_canteens_menu_use_case.execute(main_dishes=main_dishes, side_dishes=side_dishes)

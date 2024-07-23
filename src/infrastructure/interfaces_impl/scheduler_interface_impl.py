@@ -5,12 +5,13 @@ from application.services.canteen_service import CanteenService
 from domain.entities.job import Job
 from infrastructure.config.scheduler_config import scheduler
 
+
 class SchedulerInterfaceImpl(SchedulerInterface):
     def __init__(self, canteen_service: CanteenService):
         self.canteen_service = canteen_service
 
     @staticmethod
-    def add_job(job: Job) -> None:
+    async def add_job(job: Job) -> None:
         scheduler.add_job(
             func=job.func,
             trigger=job.trigger,
@@ -18,20 +19,19 @@ class SchedulerInterfaceImpl(SchedulerInterface):
             args=job.args
         )
 
-    def set_all_jobs(self):
-        self.set_canteens_parsers()
+    async def set_all_jobs(self):
+        await self.set_canteens_parsers()
 
-    def set_canteens_parsers(self):
-        self.set_parser_marburg_erlenring()
-        self.set_parser_marburg_lahnberge()
-        self.set_parser_marburg_bistro()
-        self.set_parser_marburg_cafeteria()
-        self.set_parser_marburg_mo_diner()
-        self.set_parser_giessen_thm()
+    async def set_canteens_parsers(self):
+        await self.set_parser_marburg_erlenring()
+        await self.set_parser_marburg_lahnberge()
+        await self.set_parser_marburg_bistro()
+        await self.set_parser_marburg_cafeteria()
+        await self.set_parser_marburg_mo_diner()
+        await self.set_parser_giessen_thm()
         scheduler.start()
 
-
-    def set_parser_marburg_erlenring(self):
+    async def set_parser_marburg_erlenring(self):
         scheduler.add_job(self.canteen_service.parse_canteen,
                           trigger='cron',
                           id="parser_mensa_erlenring_1",
@@ -60,7 +60,7 @@ class SchedulerInterfaceImpl(SchedulerInterface):
                           # day_of_week='mon-fri',
                           args=[1])
 
-    def set_parser_marburg_lahnberge(self):
+    async def set_parser_marburg_lahnberge(self):
         scheduler.add_job(self.canteen_service.parse_canteen,
                           trigger='cron',
                           id="parser_mensa_lahnberge_1",
@@ -80,7 +80,7 @@ class SchedulerInterfaceImpl(SchedulerInterface):
                           day_of_week='mon-fri',
                           args=[2])
 
-    def set_parser_marburg_bistro(self):
+    async def set_parser_marburg_bistro(self):
         scheduler.add_job(self.canteen_service.parse_canteen,
                           trigger='cron',
                           id="parser_bistro_1",
@@ -101,7 +101,7 @@ class SchedulerInterfaceImpl(SchedulerInterface):
                           args=[3])
 
 
-    def set_parser_marburg_cafeteria(self):
+    async def set_parser_marburg_cafeteria(self):
         scheduler.add_job(self.canteen_service.parse_canteen,
                           trigger='cron',
                           id="parser_cafeteria_lahnberge_1",
@@ -121,7 +121,7 @@ class SchedulerInterfaceImpl(SchedulerInterface):
                           day_of_week='mon-fri',
                           args=[4])
 
-    def set_parser_marburg_mo_diner(self):
+    async def set_parser_marburg_mo_diner(self):
         scheduler.add_job(self.canteen_service.parse_canteen,
                           trigger='cron',
                           id="parser_mo_diner_1",
@@ -141,7 +141,7 @@ class SchedulerInterfaceImpl(SchedulerInterface):
                           day_of_week='mon-fri',
                           args=[5])
 
-    def set_parser_giessen_thm(self):
+    async def set_parser_giessen_thm(self):
         scheduler.add_job(self.canteen_service.parse_canteen,
                           trigger='cron',
                           id="parser_thm_1",

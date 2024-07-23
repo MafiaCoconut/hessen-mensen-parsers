@@ -15,5 +15,5 @@ class SetAllSchedulersJobsUseCase:
 
         self.scheduler_interface = scheduler_interface
 
-    def execute(self):
-        self.scheduler_interface.set_all_jobs()
+    async def execute(self):
+        await self.scheduler_interface.set_all_jobs()

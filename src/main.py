@@ -7,16 +7,17 @@ from fastapi import FastAPI
 from infrastructure.config.scheduler_services_config import start_scheduler_service
 from infrastructure.config import logs_config
 from infrastructure.web.api import router
-
-app = FastAPI()
-app.include_router(router)
+from contextlib import asynccontextmanager
 
 
-@app.on_event("startup")
-async def startup_event():
-    start_scheduler_service.execute()
+@asynccontextmanager
+async def lifespan(app):
     logs_config.config()
+    yield
 
+app = FastAPI(lifespan=lifespan)
+
+app.include_router(router)
 
 if __name__ == '__main__':
     pass

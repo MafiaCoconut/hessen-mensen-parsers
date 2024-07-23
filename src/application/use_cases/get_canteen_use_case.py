@@ -16,8 +16,8 @@ class GetCanteenUseCase:
         self.main_dishes_repository = main_dishes_repository
         self.side_dishes_repository = side_dishes_repository
 
-    def get_text(self, canteen_id: int) -> str:
-        canteen = self.canteens_repository.get(canteen_id=canteen_id)
+    async def get_text(self, canteen_id: int) -> str:
+        canteen = await self.canteens_repository.get(canteen_id=canteen_id)
         if canteen is None:
             raise ValueError(f"Canteen with ID {canteen_id} does not exist.")
 
@@ -27,16 +27,16 @@ class GetCanteenUseCase:
         )
         return text
 
-    def get_object(self, canteen_id: int) -> Canteen:
-        canteen = self.canteens_repository.get(canteen_id=canteen_id)
+    async def get_object(self, canteen_id: int) -> Canteen:
+        canteen = await self.canteens_repository.get(canteen_id=canteen_id)
         if canteen is None:
             raise ValueError(f"Canteen with ID {canteen_id} does not exist.")
 
         return Canteen(canteen_id=canteen.canteen_id, name=canteen.name, description=canteen.description,
                        opened_time=canteen.opened_time, closed_time=canteen.closed_time, created_at=canteen.created_at)
 
-    def get_main_dishes_obj(self, canteen_id: int) -> list[MainDish]:
-        main_dishes = self.main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
+    async def get_main_dishes_obj(self, canteen_id: int) -> list[MainDish]:
+        main_dishes = await self.main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         new_main_dishes = []
         for i, main_dish in enumerate(main_dishes):
             new_main_dishes.append(
@@ -50,8 +50,8 @@ class GetCanteenUseCase:
             )
         return new_main_dishes
 
-    def get_side_dishes_obj(self, canteen_id: int) -> list[SideDish]:
-        side_dishes = self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
+    async def get_side_dishes_obj(self, canteen_id: int) -> list[SideDish]:
+        side_dishes = await self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         new_side_dishes = []
         for i, side_dish in enumerate(side_dishes):
             new_side_dishes.append(

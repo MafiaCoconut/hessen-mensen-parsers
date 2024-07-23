@@ -23,21 +23,21 @@ class GetCanteensMenuUseCase:
         self.side_dishes_repository = side_dishes_repository
         self.translation_service = translation_service
 
-    def execute(self, canteen_id: int, locale: str, test_time=None, test_day=None) -> dict:
-        main_dishes = self.main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
-        side_dishes = self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
-        canteen = self.canteens_repository.get(canteen_id)
+    async def execute(self, canteen_id: int, locale: str, test_time=None, test_day=None) -> dict:
+        main_dishes = await self.main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
+        side_dishes = await self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
+        canteen = await self.canteens_repository.get(canteen_id)
 
         result = {'menu': None,
-                  'error': self.check_menu_errors(canteen=canteen, locale=locale,
+                  'error': await self.check_menu_errors(canteen=canteen, locale=locale,
                                                   main_dishes=main_dishes,
                                                   test_time=test_time, test_day=test_day)}
         logging.info(result)
         try:
             menu_text = ""
-            menu_text += self.get_header(canteen=canteen, locale=locale, created_at=main_dishes[0].created_at)
-            menu_text += self.get_main_dishes_text(main_dishes=main_dishes, locale=locale)
-            menu_text += self.get_side_dishes_text(side_dishes=side_dishes, locale=locale)
+            menu_text += await self.get_header(canteen=canteen, locale=locale, created_at=main_dishes[0].created_at)
+            menu_text += await self.get_main_dishes_text(main_dishes=main_dishes, locale=locale)
+            menu_text += await self.get_side_dishes_text(side_dishes=side_dishes, locale=locale)
 
             print(menu_text)
             result['menu'] = menu_text
@@ -45,7 +45,7 @@ class GetCanteensMenuUseCase:
             pass
         return result
 
-    def check_menu_errors(self, canteen: Canteen, locale: str, main_dishes: list,
+    async def check_menu_errors(self, canteen: Canteen, locale: str, main_dishes: list,
                           test_time: int | None, test_day: int | None):
         weekday = int(datetime.now().isoweekday())
         error_text = ""
@@ -54,7 +54,7 @@ class GetCanteensMenuUseCase:
         if test_time is not None:
             if not (canteen.opened_time <= test_time <= canteen.closed_time):
                 error_type = MenuErrorCodes.CANTEEN_IS_CLOSED
-                error_text += self.translation_service.translate(
+                error_text += await self.translation_service.translate(
                     message_id='canteens-open-time',
                     locale=locale,
                     canteen_name=canteen.name)
@@ -63,7 +63,7 @@ class GetCanteensMenuUseCase:
             elif test_day is not None:
                 if not (1 <= test_day <= 5):
                     error_type = MenuErrorCodes.CANTEEN_IS_CLOSED
-                    error_text += self.translation_service.translate(
+                    error_text += await self.translation_service.translate(
                         message_id='canteens-open-time',
                         locale=locale,
                         canteen_name=canteen.name)
@@ -72,7 +72,7 @@ class GetCanteensMenuUseCase:
         elif not (canteen.opened_time <= datetime.now().hour * 60 + datetime.now().minute <= canteen.closed_time) or \
                 not (1 <= weekday <= 5):
             error_type = MenuErrorCodes.CANTEEN_IS_CLOSED
-            error_text += self.translation_service.translate(
+            error_text += await self.translation_service.translate(
                 message_id='canteens-open-time',
                 locale=locale,
                 canteen_name=canteen.name)
@@ -80,12 +80,12 @@ class GetCanteensMenuUseCase:
 
         if not main_dishes:
             error_type = MenuErrorCodes.MENU_IS_NONE
-            error_text += self.translation_service.translate(
+            error_text += await self.translation_service.translate(
                 message_id='no-menu-for-today',
                 locale=locale,
                 canteen_name=canteen.name)
             error_text += '\n\n'
-            error_text += self.translation_service.translate(
+            error_text += await self.translation_service.translate(
                 message_id='canteens-open-time',
                 locale=locale,
                 canteen_name=canteen.name)
@@ -93,12 +93,12 @@ class GetCanteensMenuUseCase:
 
         return {'type': error_type, 'text': error_text}
 
-    def get_header(self, created_at: datetime, locale: str, canteen: Canteen):
+    async def get_header(self, created_at: datetime, locale: str, canteen: Canteen):
         time_parser = created_at
         day = f"{str(time_parser.day).zfill(2)}.{str(time_parser.month).zfill(2)}"
         time_last_parser = f"{str(time_parser.hour).zfill(2)}:{str(time_parser.minute).zfill(2)}"
 
-        text = self.translation_service.translate(
+        text = await self.translation_service.translate(
             message_id='dishes-header',
             locale=locale,
             canteen_name=canteen.name,
@@ -107,9 +107,9 @@ class GetCanteensMenuUseCase:
         ) + '\n\n\n'
         return text
 
-    def get_main_dishes_text(self, main_dishes: list, locale: str):
+    async def get_main_dishes_text(self, main_dishes: list, locale: str):
 
-        text = self.translation_service.translate(
+        text = await self.translation_service.translate(
             message_id='main-dishes-title',
             locale=locale) + '\n'
 
@@ -132,11 +132,11 @@ class GetCanteensMenuUseCase:
 
         return text
 
-    def get_side_dishes_text(self, side_dishes: list, locale: str):
+    async def get_side_dishes_text(self, side_dishes: list, locale: str):
         if not side_dishes:
             return ""
 
-        text = self.translation_service.translate(
+        text = await self.translation_service.translate(
             message_id='beilagen-title',
             locale=locale) + '\n'
 

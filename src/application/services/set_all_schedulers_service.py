@@ -10,6 +10,6 @@ class StartSchedulersService:
             scheduler_interface=scheduler_interface
         )
 
-    def execute(self):
-        self.scheduler_use_case.execute()
+    async def execute(self):
+        await self.scheduler_use_case.execute()
 
