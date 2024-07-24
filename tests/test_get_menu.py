@@ -24,7 +24,7 @@ class TestCanteensMenu:
         canteen_service.save_menu(main_dishes=main_dishes, side_dishes=side_dishes)
 
         for language in languages:
-            menu = canteen_service.get_menu(canteen_id=canteen_id, locale=language, test_time=9999, test_day=3)
+            menu = canteen_service.get_canteens_dishes(canteen_id=canteen_id, locale=language, test_time=9999, test_day=3)
             print(menu)
             assert menu['error']['type'] == MenuErrorCodes.CANTEEN_IS_CLOSED
             assert isinstance(menu['menu'], str)
@@ -48,8 +48,8 @@ class TestCanteensMenu:
 
         canteen = canteen_service.get_canteen_obj(canteen_id)
         for language in languages:
-            menu = canteen_service.get_menu(canteen_id=canteen_id, locale=language,
-                                            test_time=canteen.closed_time - 30, test_day=3)
+            menu = canteen_service.get_canteens_dishes(canteen_id=canteen_id, locale=language,
+                                                       test_time=canteen.closed_time - 30, test_day=3)
             assert menu['error']['type'] == ""
             assert isinstance(menu['menu'], str)
 
@@ -72,8 +72,8 @@ class TestCanteensMenu:
 
         canteen = canteen_service.get_canteen_obj(canteen_id)
         for language in languages:
-            menu = canteen_service.get_menu(canteen_id=canteen_id, locale=language,
-                                            test_time=canteen.closed_time - 30, test_day=7)
+            menu = canteen_service.get_canteens_dishes(canteen_id=canteen_id, locale=language,
+                                                       test_time=canteen.closed_time - 30, test_day=7)
             assert menu['error']['type'] == MenuErrorCodes.CANTEEN_IS_CLOSED
             assert isinstance(menu['menu'], str)
 
@@ -97,8 +97,8 @@ class TestCanteensMenu:
 
         canteen = canteen_service.get_canteen_obj(canteen_id)
         for language in languages:
-            menu = canteen_service.get_menu(canteen_id=canteen_id, locale=language,
-                                            test_time=canteen.closed_time - 30, test_day=3)
+            menu = canteen_service.get_canteens_dishes(canteen_id=canteen_id, locale=language,
+                                                       test_time=canteen.closed_time - 30, test_day=3)
             assert menu['error']['type'] == MenuErrorCodes.MENU_IS_NONE
             assert menu['menu'] is None
 
