@@ -30,7 +30,7 @@ class GetCanteensMenuUseCase:
         result = {
             'main_dishes': main_dishes,
             'side_dishes': side_dishes,
-            'canteen_name': canteen.name
+            'canteen': canteen
         }
         return result
 
