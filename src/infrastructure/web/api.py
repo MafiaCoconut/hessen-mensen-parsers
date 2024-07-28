@@ -42,7 +42,7 @@ async def start_all_canteens_parser():
 
 
 @router.post('/parser/{canteen_id}')
-async def start_canteens_parser(canteen_id: str):
+async def start_canteens_parser(canteen_id: int):
     """
     Функция запускает парсер конкретной столовой по её ID в базе данных
     :param canteen_id: ID столовой в базе данных
@@ -54,5 +54,26 @@ async def start_canteens_parser(canteen_id: str):
         return {"error": ParserErrorCodes.NO_DATA_ON_WEBSITE.name}
     else:
         return result
+
+
+@router.put('/canteen/deactivate/{canteen_id}')
+async def deactivate_parsing(canteen_id: int):
+    """
+    Функция деактивирует парсинг столовой
+
+    :param canteen_id: ID столовой в базе данных
+    """
+    pass
+
+
+@router.put('/canteen/reactivate/{canteen_id}')
+async def reactivate_parsing(canteen_id: int):
+    """
+    Функция реактивирует парсинг столовой
+
+    :param canteen_id: ID столовой в базе данных
+    """
+    pass
+
 
 
