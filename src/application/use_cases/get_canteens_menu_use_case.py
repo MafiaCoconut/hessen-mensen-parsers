@@ -24,6 +24,15 @@ class GetCanteensMenuUseCase:
         self.translation_service = translation_service
 
     async def execute(self, canteen_id: int):
+        """
+        Функция берёт из репозиториев данные о запрашиваемой столовой и её текущих блюдах
+        :param canteen_id: ID столовой в базе данных
+        :return: :return: {
+            'main_dishes': list[MainDish],
+            'side_dishes': side_dishes[SideDishes],
+            'canteen': Canteen
+        }
+        """
         main_dishes = await self.main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         side_dishes = await self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         canteen = await self.canteens_repository.get(canteen_id)

@@ -76,7 +76,16 @@ class CanteenService:
     async def get_canteen_obj(self, canteen_id: int) -> Canteen:
         return await self.get_canteen_use_case.get_object(canteen_id=canteen_id)
 
-    async def get_canteens_dishes(self, canteen_id: int) -> dict:
+    async def get_canteens_data(self, canteen_id: int) -> dict:
+        """
+        Функция возвращает информацию о запрашиваемой столовой и её текущих блюдах
+        :param canteen_id: Id столовой в базе данных
+        :return: {
+            'main_dishes': list[MainDish],
+            'side_dishes': side_dishes[SideDishes],
+            'canteen': Canteen
+        }
+       """
         return await self.get_canteens_menu_use_case.execute(canteen_id=canteen_id)
 
     async def parse_canteen(self, canteen_id: int):

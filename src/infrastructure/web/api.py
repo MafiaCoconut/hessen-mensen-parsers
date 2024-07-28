@@ -12,29 +12,42 @@ async def read_root():
 
 
 @router.get("/canteens/{canteen_id}")
-async def read_canteens(canteen_id: str):
+async def read_canteens(canteen_id: int):
     return {"text": await canteens_service.get_canteen_text(canteen_id=int(canteen_id))}
 
 
 @router.get("/canteens_menu/{canteen_id}")
-async def read_canteens_menu(canteen_id: str):
+async def get_canteens_data(canteen_id: int):
     """
-    Функция возвращает информацию о текущих блюдах столовой
+    Функция возвращает по API информацию о запрашиваемой столовой и её текущих блюдах
+
     :param canteen_id: Id столовой в базе данных
-    :return: {'main_dishes': list[MainDish], 'side_dishes': side_dishes[SideDishes], 'canteen_name': str}
+    :return: {
+        'main_dishes': list[MainDish],
+        'side_dishes': side_dishes[SideDishes],
+        'canteen': Canteen
+    }
     """
-    return await canteens_service.get_canteens_dishes(canteen_id=int(canteen_id))
+    return await canteens_service.get_canteens_data(canteen_id=int(canteen_id))
 
 
 @router.post('/parser/all')
 async def start_all_canteens_parser():
-    print("start_all_canteens_parser")
+    """
+    Функция после запроса по API запускает парсинг всех столовых
+
+    :return: None
+    """
     return await canteens_service.parse_all_canteens()
 
 
 @router.post('/parser/{canteen_id}')
 async def start_canteens_parser(canteen_id: str):
-    print("start_canteens_parser")
+    """
+    Функция запускает парсер конкретной столовой по её ID в базе данных
+    :param canteen_id: ID столовой в базе данных
+    :return: {'main_dishes': list, 'side_dishes': list} | {'error': NO_DATA_ON_WEBSITE}
+    """
     result = await canteens_service.parse_canteen(canteen_id=int(canteen_id))
 
     if result.get('error') == ParserErrorCodes.NO_DATA_ON_WEBSITE:
