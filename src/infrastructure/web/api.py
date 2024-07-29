@@ -11,12 +11,12 @@ async def read_root():
     return {"message": "Hello, World!"}
 
 
-@router.get("/canteens/{canteen_id}")
+@router.get("/canteen/{canteen_id}")
 async def read_canteens(canteen_id: int):
     return {"text": await canteens_service.get_canteen_text(canteen_id=int(canteen_id))}
 
 
-@router.get("/canteens_menu/{canteen_id}")
+@router.get("/canteen/getDishes/{canteen_id}")
 async def get_canteens_data(canteen_id: int):
     """
     Функция возвращает по API информацию о запрашиваемой столовой и её текущих блюдах
@@ -75,5 +75,13 @@ async def reactivate_parsing(canteen_id: int):
     """
     pass
 
+
+@router.delete('/canteen/deleteDishes/{canteen_id}')
+async def delete_dishes(canteen_id: int):
+    """
+    Функция очищает меню столовой
+    :param canteen_id: ID столовой в базе данных
+    """
+    await canteens_service.delele_menu(canteen_id=canteen_id)
 
 

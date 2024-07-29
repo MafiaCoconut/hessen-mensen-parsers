@@ -131,6 +131,10 @@ class CanteenService:
             result[canteens[i]] = self.parse_canteen(int(i))
         return result
 
+    async def delele_menu(self, canteen_id: int):
+        await self.delete_main_dishes(canteen_id)
+        await self.delete_side_dishes(canteen_id)
+
     async def delete_main_dishes(self, canteen_id):
         await self.main_dishes_repository.delete_old_dishes(canteen_id)
 

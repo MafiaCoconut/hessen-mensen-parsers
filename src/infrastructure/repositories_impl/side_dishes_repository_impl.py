@@ -9,7 +9,7 @@ from sqlalchemy import select, delete, text
 
 class SideDishesRepositoryImpl(SideDishesRepository):
     @staticmethod
-    async def get(side_dish_id: int)-> SideDish:
+    async def get(side_dish_id: int) -> SideDish:
         async with async_session_factory() as session:
             side_dish = await session.query(SideDishesOrm, side_dish_id).first()
             return side_dish
