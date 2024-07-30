@@ -11,12 +11,12 @@ async def read_root():
     return {"message": "Hello, World!"}
 
 
-@router.get("/canteen/{canteen_id}")
+@router.get("/canteen{canteen_id}")
 async def read_canteens(canteen_id: int):
     return {"text": await canteens_service.get_canteen_text(canteen_id=int(canteen_id))}
 
 
-@router.get("/canteen/getDishes/{canteen_id}")
+@router.get("/canteen{canteen_id}/getDishes")
 async def get_canteens_data(canteen_id: int):
     """
     Функция возвращает по API информацию о запрашиваемой столовой и её текущих блюдах
@@ -31,7 +31,7 @@ async def get_canteens_data(canteen_id: int):
     return await canteens_service.get_canteens_data(canteen_id=int(canteen_id))
 
 
-@router.post('/parser/all')
+@router.post('/canteen/startAllParsers')
 async def start_all_canteens_parser():
     """
     Функция после запроса по API запускает парсинг всех столовых
@@ -41,7 +41,7 @@ async def start_all_canteens_parser():
     return await canteens_service.parse_all_canteens()
 
 
-@router.post('/parser/{canteen_id}')
+@router.post('/canteen{canteen_id}/startParser')
 async def start_canteens_parser(canteen_id: int):
     """
     Функция запускает парсер конкретной столовой по её ID в базе данных
@@ -56,7 +56,7 @@ async def start_canteens_parser(canteen_id: int):
         return result
 
 
-@router.put('/canteen/deactivate/{canteen_id}')
+@router.put('/canteen{canteen_id}/deactivate')
 async def deactivate_parsing(canteen_id: int):
     """
     Функция деактивирует парсинг столовой
@@ -66,7 +66,7 @@ async def deactivate_parsing(canteen_id: int):
     pass
 
 
-@router.put('/canteen/reactivate/{canteen_id}')
+@router.put('/canteen{canteen_id}/reactivate')
 async def reactivate_parsing(canteen_id: int):
     """
     Функция реактивирует парсинг столовой
@@ -76,7 +76,7 @@ async def reactivate_parsing(canteen_id: int):
     pass
 
 
-@router.delete('/canteen/deleteDishes/{canteen_id}')
+@router.delete('/canteen{canteen_id}/deleteDishes')
 async def delete_dishes(canteen_id: int):
     """
     Функция очищает меню столовой
