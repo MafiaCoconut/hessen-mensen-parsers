@@ -64,7 +64,7 @@ class SaveMenuUseCase:
         for side_dish in side_dishes:
             flag = True
             while True:
-                print(side_dish)
+                # print(side_dish)
                 try:
                     self.dishes_validator.side_dish(side_dish)
 

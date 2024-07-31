@@ -27,7 +27,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
 
             res = await session.execute(query)
             main_dishes = res.scalars().all()
-            print(main_dishes)
+            # print(main_dishes)
             return main_dishes
 
     @staticmethod
