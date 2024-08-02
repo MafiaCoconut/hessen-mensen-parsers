@@ -16,6 +16,12 @@ async def read_canteens(canteen_id: int):
     return {"text": await canteens_service.get_canteen_text(canteen_id=int(canteen_id))}
 
 
+@router.get("/canteen{canteen_id}/getObject")
+async def read_canteens(canteen_id: int):
+    result = await canteens_service.get_canteen_obj(canteen_id=int(canteen_id))
+    return {'canteen': result.model_dump()}
+
+
 @router.get("/canteen{canteen_id}/getDishes")
 async def get_canteens_data(canteen_id: int):
     """
