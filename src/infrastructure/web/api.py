@@ -2,7 +2,7 @@ from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
 from infrastructure.config.canteen_service_config import canteens_service
 from infrastructure.interfaces_impl.errors import ParserErrorCodes
-
+from application.exceptions.repositories_exceptions import CanteenWrongDataException, CanteenNotFoundException
 router = APIRouter()
 
 
@@ -11,15 +11,21 @@ async def read_root():
     return {"message": "Hello, World!"}
 
 
-@router.get("/canteen{canteen_id}")
-async def read_canteens(canteen_id: int):
-    return {"text": await canteens_service.get_canteen_text(canteen_id=int(canteen_id))}
+# @router.get("/canteen{canteen_id}")
+# async def read_canteens(canteen_id: int):
+#     return {"text": await canteens_service.get_canteen_text(canteen_id=int(canteen_id))}
 
 
 @router.get("/canteen{canteen_id}/getObject")
-async def read_canteens(canteen_id: int):
-    result = await canteens_service.get_canteen_obj(canteen_id=int(canteen_id))
-    return {'canteen': result.model_dump()}
+async def get_canteen_object(canteen_id: int):
+    try:
+        result = await canteens_service.get_canteen_obj(canteen_id=int(canteen_id))
+        return {'canteen': result.model_dump()}
+    except CanteenWrongDataException as e:
+        return {'error': e}
+    except CanteenNotFoundException as e:
+        return {'error': e}
+
 
 
 @router.get("/canteen{canteen_id}/getDishes")

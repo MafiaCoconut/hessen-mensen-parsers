@@ -1,5 +1,7 @@
 from typing import List
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from application.repositories.side_dishes_repository import SideDishesRepository
 from domain.entities.side_dish import SideDish
 from infrastructure.db.base import async_engine, async_session_factory, Base
@@ -8,34 +10,56 @@ from sqlalchemy import select, delete, text
 
 
 class SideDishesRepositoryImpl(SideDishesRepository):
-    @staticmethod
-    async def get(side_dish_id: int) -> SideDish:
-        async with async_session_factory() as session:
-            side_dish = await session.query(SideDishesOrm, side_dish_id).first()
-            return side_dish
+    def __init__(self, session: AsyncSession):
+        self.session = session
 
-    @staticmethod
-    async def get_all_from_canteen(canteen_id: int) -> list[SideDish]:
-        async with async_session_factory() as session:
+    async def get(self, side_dish_id: int) -> SideDish:
+        async with self.session.begin():
+            query = select(SideDishesOrm).where(SideDishesOrm.side_dish_id == side_dish_id)
+            result = await self.session.execute(query)
+            side_dish = result.scalars().first()
+            return SideDish(
+                side_dish_id=side_dish.side_dish_id,
+                name=side_dish.name,
+                type=side_dish.type,
+                price=side_dish.price,
+                properties=side_dish.properties,
+                canteen_id=side_dish.canteen_id
+            )
+
+    async def get_all_from_canteen(self, canteen_id: int) -> list[SideDish]:
+        async with self.session.begin():
             query = (
                 select(SideDishesOrm)
-                .filter(SideDishesOrm.canteen_id == int(canteen_id))
+                .where(SideDishesOrm.canteen_id == int(canteen_id))
             )
-            res = await session.execute(query)
-            side_dishes = res.scalars().all()
-            return side_dishes
+            res = await self.session.execute(query)
 
-    @staticmethod
-    async def get_all() -> list[SideDish]:
-        async with async_session_factory() as session:
+            return [SideDish(
+                side_dish_id=side_dish.side_dish_id,
+                name=side_dish.name,
+                type=side_dish.type,
+                price=side_dish.price,
+                properties=side_dish.properties,
+                canteen_id=side_dish.canteen_id
+            ) for side_dish in res.scalars().all()]
+
+    async def get_all(self) -> list[SideDish]:
+        async with self.session.begin():
             query = select(SideDishesOrm)
-            res = await session.execute(query)
-            side_dishes = res.scalars().all()
-            return side_dishes
+            res = await self.session.execute(query)
 
-    @staticmethod
-    async def save(side_dish: SideDish):
-        async with async_session_factory() as session:
+            return [SideDish(
+                side_dish_id=side_dish.side_dish_id,
+                name=side_dish.name,
+                type=side_dish.type,
+                price=side_dish.price,
+                properties=side_dish.properties,
+                canteen_id=side_dish.canteen_id
+            ) for side_dish in res.scalars().all()]
+
+    async def save(self, side_dish: SideDish):
+        async with self.session.begin():
             side_dish = SideDishesOrm(
                 name=side_dish.name,
                 type=side_dish.type,
@@ -43,12 +67,11 @@ class SideDishesRepositoryImpl(SideDishesRepository):
                 properties=side_dish.properties,
                 canteen_id=side_dish.canteen_id
             )
-            session.add(side_dish)
-            await session.commit()
+            self.session.add(side_dish)
+            await self.session.commit()
 
-    @staticmethod
-    async def save_many(side_dishes: List[SideDish]):
-        async with async_session_factory() as session:
+    async def save_many(self, side_dishes: List[SideDish]):
+        async with self.session.begin():
             for dish in side_dishes:
                 main_dish = SideDishesOrm(
                     name=dish.name,
@@ -57,23 +80,22 @@ class SideDishesRepositoryImpl(SideDishesRepository):
                     properties=dish.properties,
                     canteen_id=dish.canteen_id
                 )
-                session.add(main_dish)
-            await session.commit()
+                self.session.add(main_dish)
+            await self.session.commit()
 
-    @staticmethod
-    async def delete_old_dishes(canteen_id: int):
-        async with async_session_factory() as session:
+    async def delete_old_dishes(self, canteen_id: int):
+        async with self.session.begin():
             query = (
                 delete(SideDishesOrm)
-                .filter(SideDishesOrm.canteen_id == int(canteen_id))
+                .where(SideDishesOrm.canteen_id == int(canteen_id))
             )
-            await session.execute(query)
-            await session.commit()
+            await self.session.execute(query)
+            await self.session.commit()
 
-    @staticmethod
-    async def delete_all() -> None:
-        async with async_session_factory() as session:
-            await session.execute(delete(SideDishesOrm))
-            await session.execute(text(f"ALTER SEQUENCE {SideDishesOrm.__tablename__}_side_dish_id_seq RESTART WITH 1;"))
+    async def delete_all(self) -> None:
+        async with self.session.begin():
+            await self.session.execute(delete(SideDishesOrm))
+            await self.session.execute(
+                text(f"ALTER SEQUENCE {SideDishesOrm.__tablename__}_side_dish_id_seq RESTART WITH 1;"))
 
-            await session.commit()
+            await self.session.commit()
