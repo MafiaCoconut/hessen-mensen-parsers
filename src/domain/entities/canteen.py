@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, Field
 
+
 class Canteen(BaseModel):
     canteen_id: int = Field(default=None)
     name: str = Field(default=None)
