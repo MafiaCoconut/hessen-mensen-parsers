@@ -24,7 +24,9 @@ class SideDishesRepositoryImpl(SideDishesRepository):
                 type=side_dish.type,
                 price=side_dish.price,
                 properties=side_dish.properties,
-                canteen_id=side_dish.canteen_id
+                canteen_id=side_dish.canteen_id,
+                created_at=side_dish.created_at,
+                updated_at=side_dish.updated_at,
             )
 
     async def get_all_from_canteen(self, canteen_id: int) -> list[SideDish]:
@@ -41,7 +43,9 @@ class SideDishesRepositoryImpl(SideDishesRepository):
                 type=side_dish.type,
                 price=side_dish.price,
                 properties=side_dish.properties,
-                canteen_id=side_dish.canteen_id
+                canteen_id=side_dish.canteen_id,
+                created_at=side_dish.created_at,
+                updated_at=side_dish.updated_at,
             ) for side_dish in res.scalars().all()]
 
     async def get_all(self) -> list[SideDish]:
@@ -55,7 +59,9 @@ class SideDishesRepositoryImpl(SideDishesRepository):
                 type=side_dish.type,
                 price=side_dish.price,
                 properties=side_dish.properties,
-                canteen_id=side_dish.canteen_id
+                canteen_id=side_dish.canteen_id,
+                created_at=side_dish.created_at,
+                updated_at=side_dish.updated_at,
             ) for side_dish in res.scalars().all()]
 
     async def save(self, side_dish: SideDish):
