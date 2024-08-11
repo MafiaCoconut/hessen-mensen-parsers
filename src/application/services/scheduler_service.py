@@ -36,3 +36,7 @@ class SchedulerService:
 
     async def set_start_jobs(self) -> None:
         await self.set_all_schedulers_jobs.execute()
+
+    async def get_all_jobs(self) -> list:
+        return await self.scheduler_interface.get_all()
+

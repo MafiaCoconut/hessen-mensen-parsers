@@ -1,13 +1,17 @@
 from fastapi import Depends, APIRouter, Response, status
 from sqlalchemy.orm import Session
-from infrastructure.config.services_config import get_canteens_service
+
+from application.services.canteen_service import CanteensService
+from application.services.scheduler_service import SchedulerService
+from infrastructure.config.services_config import get_canteens_service, get_scheduler_service
 from infrastructure.interfaces_impl.errors import ParserErrorCodes
 from application.exceptions.repositories_exceptions import CanteenWrongDataException, CanteenNotFoundException
+
 router = APIRouter()
 
 
 @router.get("/")
-async def read_root(response: Response,):
+async def read_root(response: Response, ):
     return {"message": "Hello, World!"}
 
 
@@ -25,7 +29,7 @@ async def get_canteen_object(canteen_id: int, response: Response, canteens_servi
 
 
 @router.get("/canteen{canteen_id}/getDishes")
-async def get_canteens_data(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
+async def get_canteens_data(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция возвращает по API информацию о запрашиваемой столовой и её текущих блюдах
 
@@ -40,7 +44,7 @@ async def get_canteens_data(canteen_id: int, response: Response, canteens_servic
 
 
 @router.post('/canteen/startAllParsers')
-async def start_all_canteens_parser(response: Response, canteens_service = Depends(get_canteens_service)):
+async def start_all_canteens_parser(response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция после запроса по API запускает парсинг всех столовых
 
@@ -50,7 +54,7 @@ async def start_all_canteens_parser(response: Response, canteens_service = Depen
 
 
 @router.post('/canteen{canteen_id}/startParser')
-async def start_canteens_parser(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
+async def start_canteens_parser(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция запускает парсер конкретной столовой по её ID в базе данных
     :param canteen_id: ID столовой в базе данных
@@ -65,7 +69,7 @@ async def start_canteens_parser(canteen_id: int, response: Response, canteens_se
 
 
 @router.put('/canteen{canteen_id}/deactivate')
-async def deactivate_parsing(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
+async def deactivate_parsing(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция деактивирует парсинг столовой
 
@@ -75,21 +79,25 @@ async def deactivate_parsing(canteen_id: int, response: Response, canteens_servi
 
 
 @router.put('/canteen{canteen_id}/reactivate')
-async def reactivate_parsing(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
+async def reactivate_parsing(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция реактивирует парсинг столовой
 
     :param canteen_id: ID столовой в базе данных
     """
-    pass
+    await canteens_service.reactivate_canteen(canteen_id)
 
 
-@router.delete('/canteen{canteen_id}/deleteDishes')
-async def delete_dishes(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
-    """
-    Функция очищает меню столовой
-    :param canteen_id: ID столовой в базе данных
-    """
-    await canteens_service.delele_menu(canteen_id=canteen_id)
+# TODO доделать
+# @router.delete('/canteen{canteen_id}/deleteDishes')
+# async def delete_dishes(canteen_id: int, response: Response, canteens_service: CanteensService = Depends(get_canteens_service)):
+#     """
+#     Функция очищает меню столовой
+#     :param canteen_id: ID столовой в базе данных
+#     """
+#     await canteens_service.delele_menu(canteen_id=canteen_id)
 
 
+@router.get("/jobs/getAll")
+async def get_all_jobs(response: Response, scheduler_service: SchedulerService = Depends(get_scheduler_service)):
+    return await scheduler_service.get_all_jobs()

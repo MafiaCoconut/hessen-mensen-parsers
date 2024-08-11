@@ -14,7 +14,6 @@ class DeactivateParsingUseCase:
         self.delete_jobs_use_case = delete_jobs_use_case
 
     async def execute(self, canteen_id: int):
-
         await self.canteens_repository.update_status(canteen_id=canteen_id, new_status="deactivated")
         canteen = await self.canteens_repository.get(canteen_id=canteen_id)
         await self.scheduler_interface.get_all()

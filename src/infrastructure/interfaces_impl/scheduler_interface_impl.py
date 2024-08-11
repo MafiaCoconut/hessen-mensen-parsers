@@ -28,6 +28,5 @@ class SchedulerInterfaceImpl(SchedulerInterface):
 
     async def get_all(self) -> list:
         jobs = scheduler.get_jobs()
-        [ic(f"{job.id} - {job.next_run_time}") for job in jobs]
-        return [job for job in jobs]
+        return [f"{job.id} - {job.next_run_time}" for job in jobs]
 

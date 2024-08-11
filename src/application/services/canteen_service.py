@@ -6,6 +6,7 @@ from application.repositories.side_dishes_repository import SideDishesRepository
 from application.services.translation_service import TranslationService
 from application.use_cases.deactivate_parsing_use_case import DeactivateParsingUseCase
 from application.use_cases.delete_jobs_by_canteen_use_case import DeleteJobsByCanteenUseCase
+from application.use_cases.reactivate_parsing_use_case import ReactivateParsingUseCase
 from application.use_cases.set_jobs_by_canteen_use_case import SetJobsByCanteenUseCase
 from application.use_cases.get_canteen_use_case import GetCanteenUseCase
 from application.use_cases.get_canteens_menu_use_case import GetCanteensMenuUseCase
@@ -56,11 +57,15 @@ class CanteensService:
         self.set_jobs_use_case = SetJobsByCanteenUseCase(
             scheduler_interface=scheduler_interface,
         )
-
         self.deactivate_canteen_use_case = DeactivateParsingUseCase(
             canteens_repository=canteens_repository,
             scheduler_interface=scheduler_interface,
             delete_jobs_use_case=self.delete_jobs_by_canteen_use_case
+        )
+        self.reactivate_canteen_use_case = ReactivateParsingUseCase(
+            canteens_repository=canteens_repository,
+            scheduler_interface=scheduler_interface,
+            set_jobs_use_case=self.set_jobs_use_case
         )
 
     @property
@@ -134,6 +139,8 @@ class CanteensService:
         return result
 
     async def parse_all_canteens(self):
+        # TODO при активации нужно проверять какие столовые имеют статус "active"
+        # TODO переделать под use case и использовать репозиторий, чтобы получать нужные данные
         canteens = {
             '1': "erlenring",
             '2': "lahnberge",
@@ -171,3 +178,8 @@ class CanteensService:
 
     async def deactivate_canteen(self, canteen_id: int):
         await self.deactivate_canteen_use_case.execute(canteen_id=canteen_id)
+
+    async def reactivate_canteen(self, canteen_id: int):
+        await self.reactivate_canteen_use_case.execute(canteen_id=canteen_id, func=self.parse_canteen)
+
+
