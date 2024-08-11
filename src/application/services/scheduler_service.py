@@ -4,6 +4,7 @@ from datetime import datetime
 from application.interfaces.scheduler_interface import SchedulerInterface
 from application.services.canteen_service import CanteensService
 from application.use_cases.set_all_scheduler_use_case import SetAllSchedulersJobsUseCase
+from application.use_cases.set_jobs_by_canteen_use_case import SetJobsByCanteenUseCase
 from domain.entities.job import Job
 
 
@@ -13,10 +14,13 @@ class SchedulerService:
                  canteens_service: CanteensService,
                  ):
         self.scheduler_interface = scheduler_interface
-
+        self.set_jobs_use_case = SetJobsByCanteenUseCase(
+            scheduler_interface=scheduler_interface,
+            canteens_service=canteens_service
+        )
         self.set_all_schedulers_jobs = SetAllSchedulersJobsUseCase(
             scheduler_interface=scheduler_interface,
-            canteens_service=canteens_service,
+            set_jobs_use_case=self.set_jobs_use_case,
         )
 
     async def add_job(self, job: Job) -> None:
