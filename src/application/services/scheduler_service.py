@@ -16,11 +16,12 @@ class SchedulerService:
         self.scheduler_interface = scheduler_interface
         self.set_jobs_use_case = SetJobsByCanteenUseCase(
             scheduler_interface=scheduler_interface,
-            canteens_service=canteens_service
+            # canteens_service=canteens_service
         )
         self.set_all_schedulers_jobs = SetAllSchedulersJobsUseCase(
             scheduler_interface=scheduler_interface,
             set_jobs_use_case=self.set_jobs_use_case,
+            canteens_service=canteens_service
         )
 
     async def add_job(self, job: Job) -> None:

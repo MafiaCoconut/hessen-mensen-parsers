@@ -8,16 +8,13 @@ from application.use_cases.set_jobs_by_canteen_use_case import SetJobsByCanteenU
 from domain.entities.job import Job
 
 
-# from application.services.scheduler_service import SchedulerService
-# from application.repositories.meeting_repository import MeetingRepository
-# from application.repositories.scheduler_repository import SchedulerRepository
-
-
 class SetAllSchedulersJobsUseCase:
     def __init__(self,
                  scheduler_interface: SchedulerInterface,
                  set_jobs_use_case: SetJobsByCanteenUseCase,
+                 canteens_service: CanteensService,
                  ):
+        self.canteens_service = canteens_service
         self.scheduler_interface = scheduler_interface
         self.set_jobs_use_case = set_jobs_use_case
 
@@ -32,20 +29,33 @@ class SetAllSchedulersJobsUseCase:
         await self.scheduler_interface.start()
 
     async def set_parser_marburg_erlenring(self):
-        await self.set_jobs_use_case.execute(canteen_id=1)
+        await self.set_jobs_use_case.execute(
+            canteen=await self.canteens_service.get_canteen_obj(canteen_id=1),
+            func=self.canteens_service.parse_canteen
+        )
 
     async def set_parser_marburg_lahnberge(self):
-        await self.set_jobs_use_case.execute(canteen_id=2)
-
+        await self.set_jobs_use_case.execute(
+            canteen=await self.canteens_service.get_canteen_obj(canteen_id=2),
+            func=self.canteens_service.parse_canteen
+        )
     async def set_parser_marburg_cafeteria(self):
-        await self.set_jobs_use_case.execute(canteen_id=3)
-
+        await self.set_jobs_use_case.execute(
+            canteen=await self.canteens_service.get_canteen_obj(canteen_id=3),
+            func=self.canteens_service.parse_canteen
+        )
     async def set_parser_marburg_mo_diner(self):
-        await self.set_jobs_use_case.execute(canteen_id=4)
-
+        await self.set_jobs_use_case.execute(
+            canteen=await self.canteens_service.get_canteen_obj(canteen_id=4),
+            func=self.canteens_service.parse_canteen
+        )
     async def set_parser_marburg_bistro(self):
-        await self.set_jobs_use_case.execute(canteen_id=5)
-
+        await self.set_jobs_use_case.execute(
+            canteen=await self.canteens_service.get_canteen_obj(canteen_id=5),
+            func=self.canteens_service.parse_canteen
+        )
     async def set_parser_giessen_thm(self):
-        await self.set_jobs_use_case.execute(canteen_id=6)
-
+        await self.set_jobs_use_case.execute(
+            canteen=await self.canteens_service.get_canteen_obj(canteen_id=6),
+            func=self.canteens_service.parse_canteen
+        )
