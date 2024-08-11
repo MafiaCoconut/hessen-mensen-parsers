@@ -1,5 +1,5 @@
 from domain.entities.canteen import Canteen
-from src.application.services.canteen_service import CanteenService
+from src.application.services.canteen_service import CanteensService
 import pytest
 from contextlib import nullcontext as does_not_raise
 

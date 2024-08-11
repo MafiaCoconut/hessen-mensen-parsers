@@ -44,6 +44,8 @@ class CanteensRepositoryImpl(CanteensRepository):
                     opened_time=canteen.opened_time,
                     closed_time=canteen.closed_time,
                     created_at=canteen.created_at,
+                    status=canteen.status,
+                    times=canteen.times,
                 )
             except:
                 raise CanteenWrongDataException()
@@ -72,9 +74,20 @@ class CanteensRepositoryImpl(CanteensRepository):
         async with self.session.begin():
             query = (
                 delete(CanteensOrm)
-                .filter(CanteensOrm.canteen_id == int(canteen_id))
+                .where(CanteensOrm.canteen_id == int(canteen_id))
             )
             await self.session.execute(query)
             await self.session.commit()
+
+    async def update_status(self, canteen_id: int, new_status: str) -> None:
+        async with self.session.begin():
+            query = (
+                update(CanteensOrm)
+                .where(CanteensOrm.canteen_id == canteen_id)
+                .values(status=new_status)
+            )
+            await self.session.execute(query)
+            await self.session.commit()
+
 
 

@@ -1,8 +1,10 @@
+from application.interfaces.scheduler_interface import SchedulerInterface
 from application.providers.canteens_provider import CanteensDependencyProvider
 from application.repositories.canteens_repository import CanteensRepository
 from application.repositories.main_dishes_repository import MainDishesRepository
 from application.repositories.side_dishes_repository import SideDishesRepository
 from application.services.translation_service import TranslationService
+from application.use_cases.deactivate_parsing_use_case import DeactivateParsingUseCase
 from application.use_cases.get_canteen_use_case import GetCanteenUseCase
 from application.use_cases.get_canteens_menu_use_case import GetCanteensMenuUseCase
 from application.use_cases.parse_menu_use_case import ParseCanteensMenuUseCase
@@ -13,14 +15,15 @@ from domain.entities.main_dish import MainDish
 from domain.entities.side_dish import SideDish
 
 
-class CanteenService:
+class CanteensService:
     def __init__(self,
                  canteens_repository: CanteensRepository,
                  main_dishes_repository: MainDishesRepository,
                  side_dishes_repository: SideDishesRepository,
                  canteens_provider: CanteensDependencyProvider,
                  translation_service: TranslationService,
-                 dishes_validator: DishesValidator
+                 dishes_validator: DishesValidator,
+                 scheduler_interface: SchedulerInterface
                  ):
         self.canteens_repository = canteens_repository
         self.main_dishes_repository = main_dishes_repository
@@ -44,6 +47,10 @@ class CanteenService:
             main_dishes_repository=self.main_dishes_repository,
             side_dishes_repository=self.side_dishes_repository,
             dishes_validator=self.dishes_validator
+        )
+        self.deactivate_canteen_use_case = DeactivateParsingUseCase(
+            canteens_repository=canteens_repository,
+            scheduler_interface=scheduler_interface
         )
 
     @property
@@ -151,3 +158,6 @@ class CanteenService:
 
     async def save_menu(self, main_dishes: list[MainDish], side_dishes: list[SideDish]):
         await self.save_canteens_menu_use_case.execute(main_dishes=main_dishes, side_dishes=side_dishes)
+
+    async def deactivate_canteen(self, canteen_id: int):
+        await self.deactivate_canteen_use_case.execute(canteen_id=canteen_id)

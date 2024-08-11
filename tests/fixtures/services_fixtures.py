@@ -1,4 +1,4 @@
-from application.services.canteen_service import CanteenService
+from application.services.canteen_service import CanteensService
 from application.services.translation_service import TranslationService
 from application.services.scheduler_service import SchedulerService
 from application.services.set_all_schedulers_service import SetAllSchedulersJobsUseCase
@@ -11,7 +11,7 @@ def canteen_service(
         canteens_repository, main_dishes_repository, side_dishes_repository,
         canteens_provider, translation_service, dishes_validator
 ):
-    canteen_service = CanteenService(
+    canteen_service = CanteensService(
         canteens_repository=canteens_repository,
         main_dishes_repository=main_dishes_repository,
         side_dishes_repository=side_dishes_repository,

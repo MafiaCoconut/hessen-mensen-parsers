@@ -27,3 +27,10 @@ class CanteensRepository(ABC):
     async def delete(self, canteen_id: int) -> None:
         pass
 
+    @abstractmethod
+    async def update_status(self, canteen_id: int, new_status: str) -> None:
+        pass
+
+
+
+

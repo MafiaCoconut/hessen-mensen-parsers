@@ -1,6 +1,6 @@
 from fastapi import Depends, APIRouter, Response, status
 from sqlalchemy.orm import Session
-from infrastructure.config.canteen_service_config import canteens_service
+from infrastructure.config.services_config import get_canteens_service
 from infrastructure.interfaces_impl.errors import ParserErrorCodes
 from application.exceptions.repositories_exceptions import CanteenWrongDataException, CanteenNotFoundException
 router = APIRouter()
@@ -12,7 +12,7 @@ async def read_root(response: Response,):
 
 
 @router.get("/canteen{canteen_id}/getObject")
-async def get_canteen_object(canteen_id: int, response: Response, ):
+async def get_canteen_object(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     try:
         result = await canteens_service.get_canteen_obj(canteen_id=int(canteen_id))
         return {'canteen': result.model_dump()}
@@ -25,7 +25,7 @@ async def get_canteen_object(canteen_id: int, response: Response, ):
 
 
 @router.get("/canteen{canteen_id}/getDishes")
-async def get_canteens_data(canteen_id: int, response: Response, ):
+async def get_canteens_data(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
     """
     Функция возвращает по API информацию о запрашиваемой столовой и её текущих блюдах
 
@@ -40,7 +40,7 @@ async def get_canteens_data(canteen_id: int, response: Response, ):
 
 
 @router.post('/canteen/startAllParsers')
-async def start_all_canteens_parser(response: Response, ):
+async def start_all_canteens_parser(response: Response, canteens_service = Depends(get_canteens_service)):
     """
     Функция после запроса по API запускает парсинг всех столовых
 
@@ -50,7 +50,7 @@ async def start_all_canteens_parser(response: Response, ):
 
 
 @router.post('/canteen{canteen_id}/startParser')
-async def start_canteens_parser(canteen_id: int, response: Response, ):
+async def start_canteens_parser(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
     """
     Функция запускает парсер конкретной столовой по её ID в базе данных
     :param canteen_id: ID столовой в базе данных
@@ -65,17 +65,17 @@ async def start_canteens_parser(canteen_id: int, response: Response, ):
 
 
 @router.put('/canteen{canteen_id}/deactivate')
-async def deactivate_parsing(canteen_id: int, response: Response,):
+async def deactivate_parsing(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
     """
     Функция деактивирует парсинг столовой
 
     :param canteen_id: ID столовой в базе данных
     """
-    pass
+    await canteens_service.deactivate_canteen(canteen_id)
 
 
 @router.put('/canteen{canteen_id}/reactivate')
-async def reactivate_parsing(canteen_id: int, response: Response,):
+async def reactivate_parsing(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
     """
     Функция реактивирует парсинг столовой
 
@@ -85,7 +85,7 @@ async def reactivate_parsing(canteen_id: int, response: Response,):
 
 
 @router.delete('/canteen{canteen_id}/deleteDishes')
-async def delete_dishes(canteen_id: int, response: Response,):
+async def delete_dishes(canteen_id: int, response: Response, canteens_service = Depends(get_canteens_service)):
     """
     Функция очищает меню столовой
     :param canteen_id: ID столовой в базе данных

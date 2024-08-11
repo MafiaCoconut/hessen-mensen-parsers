@@ -1,7 +1,7 @@
 import pytest
 from contextlib import nullcontext as does_not_raise
 
-from application.services.canteen_service import CanteenService
+from application.services.canteen_service import CanteensService
 from domain.entities.main_dish import MainDish
 from domain.entities.side_dish import SideDish
 
@@ -18,7 +18,7 @@ class TestSaveMenuUseCase:
         indirect=True
     )
     # def test_save(self, main_dishes: list[MainDish], side_dishes: list[SideDish], expectation, canteen_service: CanteenService):
-    def test_save(self, canteens_menu, canteen_service: CanteenService, set_test_canteens):
+    def test_save(self, canteens_menu, canteen_service: CanteensService, set_test_canteens):
         canteen_id, main_dishes, side_dishes, expectation = canteens_menu
         with expectation:
 

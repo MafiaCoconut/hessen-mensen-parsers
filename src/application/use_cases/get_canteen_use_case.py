@@ -32,8 +32,7 @@ class GetCanteenUseCase:
         if canteen is None:
             raise ValueError(f"Canteen with ID {canteen_id} does not exist.")
 
-        return Canteen(canteen_id=canteen.canteen_id, name=canteen.name, description=canteen.description,
-                       opened_time=canteen.opened_time, closed_time=canteen.closed_time, created_at=canteen.created_at)
+        return canteen
 
     async def get_main_dishes_obj(self, canteen_id: int) -> list[MainDish]:
         main_dishes = await self.main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
