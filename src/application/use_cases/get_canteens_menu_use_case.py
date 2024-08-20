@@ -33,9 +33,9 @@ class GetCanteensMenuUseCase:
             'canteen': Canteen
         }
         """
+        canteen = await self.canteens_repository.get(canteen_id)
         main_dishes = await self.main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
         side_dishes = await self.side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
-        canteen = await self.canteens_repository.get(canteen_id)
         result = {
             'main_dishes': main_dishes,
             'side_dishes': side_dishes,
