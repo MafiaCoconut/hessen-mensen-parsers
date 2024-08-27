@@ -145,14 +145,14 @@ class CanteensService:
             '1': "erlenring",
             '2': "lahnberge",
             '3': "bistro",
-            '4': "cafeteria",
-            '5': "mo_diner",
+            # '4': "cafeteria",
+            # '5': "mo_diner",
             '6': "thm",
         }
 
         result = {}
         for i in canteens.keys():
-            result[canteens[i]] = self.parse_canteen(int(i))
+            result[canteens[i]] = await self.parse_canteen(int(i))
         return result
 
     async def delele_menu(self, canteen_id: int):

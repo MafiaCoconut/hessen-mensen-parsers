@@ -1,55 +1,12 @@
 import logging
 from dotenv import load_dotenv
 import os
+from functools import wraps
 
-# load_dotenv()
 system_logger = logging.getLogger('system_logging')
-user_logger = logging.getLogger('user_logging')
-mensa_logger = logging.getLogger('mensa')
-
-
-def set_func(function: str, tag: str, status: str = "info"):
-    result = f"Called Tag:[{tag}] Function:({function})"
-    if status == "info":
-        system_logger.info(result)
-    elif status == "debug":
-        system_logger.debug(result)
-
-
-def set_inside_func(function, tag, data, status="info"):
-    result = f"[{tag}] [{function}]: {data}"
-    if status == "info":
-        system_logger.info(result)
-    elif status == "debug":
-        system_logger.debug(result)
-    elif status == 'error':
-        system_logger.error(result)
-
-
-def set_func_and_person(function, tag, message, status="info"):
-    result = f"User: {message.chat.username}/{message.chat.id} Tag: [{tag}]  Function: ({function})"
-    if status == "info":
-        user_logger.info(result)
-        system_logger.info(result)
-    elif status == "debug":
-        user_logger.debug(result)
-        system_logger.debug(result)
-
-
-def send_log(message):
-    result = f'User: {message.chat.username}/{message.chat.id} Send Message: "{message.text}"'
-    user_logger.info(result)
-    system_logger.debug(result)
-
-
-def add_or_delete_user(message, command):
-    if command == "add":
-        result = f'Add User: {message.chat.username}/{message.chat.id}'
-    else:
-        result = f'Delete User: {message.chat.username}/{message.chat.id}'
-
-    user_logger.info(result)
-    system_logger.info(result)
+error_logger = logging.getLogger("error_logger")
+mensa_logger = logging.getLogger('mensa_logger')
+apscheduler_logger = logging.getLogger('apscheduler')
 
 
 def config():
@@ -63,44 +20,62 @@ def config():
     system_handler = logging.FileHandler('logs/system_data.log')
     system_handler.setFormatter(formatter)
 
+    error_handler = logging.FileHandler("logs/error_data.log")
+    error_handler.setFormatter(formatter)
+
     # mensa_handler = logging.FileHandler('data/logs/mensa_data.log')
     # mensa_handler.setFormatter(formatter)
-
-    user_handler = logging.FileHandler('logs/user_data.log')
-    user_handler.setFormatter(formatter)
 
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
 
-    global system_logger
-    if os.getenv("DEVICE") in ["Laptop", "Ubuntu", "RaspberryTest"]:
+    if os.getenv("MODE") == "DEVELOPMENT":
+        console_handler = logging.StreamHandler()
+        console_handler.setFormatter(formatter)
+
         system_logger.setLevel(logging.DEBUG)
+        error_logger.setLevel(logging.DEBUG)
+
+        system_logger.addHandler(console_handler)
+        error_logger.addHandler(console_handler)
+        apscheduler_logger.addHandler(console_handler)
+
     else:
         system_logger.setLevel(logging.INFO)
-    system_logger.addHandler(system_handler)
-    system_logger.addHandler(console_handler)
+        error_logger.setLevel(logging.ERROR)
 
-    apscheduler_logger = logging.getLogger('apscheduler')
     apscheduler_logger.setLevel(logging.DEBUG)
     apscheduler_logger.addHandler(system_handler)
     apscheduler_logger.addHandler(console_handler)
 
-    # aiogram_logger = logging.getLogger('aiogram')
-    # aiogram_logger.setLevel(logging.DEBUG)
-    # aiogram_logger.addHandler(system_handler)
 
-    # global mensa_logger
-    # mensa_logger.setLevel(logging.DEBUG)
-    # mensa_logger.addHandler(mensa_handler)
+def log_decorator(func, log_level=logging.DEBUG):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        system_logger.log(level=log_level, msg=f"Called function: {func.__name__}. Args: {args}. Kwargs: {kwargs}")
 
-    global user_logger
-    user_logger.setLevel(logging.DEBUG)
-    user_logger.addHandler(user_handler)
-    user_logger.addHandler(console_handler)
+        # Выполнение функции и получение результата
+        result = await func(*args, **kwargs)
 
-    # # Настройка логгера Uvicorn
-    # uvicorn_access_logger = logging.getLogger("uvicorn.access")
-    # uvicorn_access_logger.addHandler(console_handler)
-    #
-    # uvicorn_error_logger = logging.getLogger("uvicorn.error")
-    # uvicorn_error_logger.addHandler(console_handler)
+        # Запись результата выполнения функции
+        # system_logger.log(level=log_level, msg=f"Result: {result}")
+
+        return result
+
+    return wrapper
+
+
+def log_api_decorator(func, log_level=logging.INFO):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        system_logger.log(level=log_level, msg=f"API Called function: {func.__name__}")
+
+        # Выполнение функции и получение результата
+        result = await func(*args, **kwargs)
+
+        # Запись результата выполнения функции
+        system_logger.log(level=log_level, msg=f"Result: {result}")
+
+        return result
+
+    return wrapper

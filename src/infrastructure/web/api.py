@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from application.services.canteen_service import CanteensService
 from application.services.scheduler_service import SchedulerService
+from infrastructure.config.logs_config import log_api_decorator
 from infrastructure.config.services_config import get_canteens_service, get_scheduler_service
 from infrastructure.interfaces_impl.errors import ParserErrorCodes
 from application.exceptions.repositories_exceptions import CanteenWrongDataException, CanteenNotFoundException
@@ -11,11 +12,13 @@ router = APIRouter()
 
 
 @router.get("/")
+@log_api_decorator
 async def read_root(response: Response, ):
     return {"message": "Hello, World!"}
 
 
 @router.get("/canteen{canteen_id}/getObject")
+@log_api_decorator
 async def get_canteen_object(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     try:
         result = await canteens_service.get_canteen_obj(canteen_id=int(canteen_id))
@@ -29,6 +32,7 @@ async def get_canteen_object(canteen_id: int, response: Response, canteens_servi
 
 
 @router.get("/canteen{canteen_id}/getDishes")
+@log_api_decorator
 async def get_canteens_data(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция возвращает по API информацию о запрашиваемой столовой и её текущих блюдах
@@ -44,6 +48,7 @@ async def get_canteens_data(canteen_id: int, response: Response, canteens_servic
 
 
 @router.post('/canteen/startAllParsers')
+@log_api_decorator
 async def start_all_canteens_parser(response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция после запроса по API запускает парсинг всех столовых
@@ -54,6 +59,7 @@ async def start_all_canteens_parser(response: Response, canteens_service=Depends
 
 
 @router.post('/canteen{canteen_id}/startParser')
+@log_api_decorator
 async def start_canteens_parser(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция запускает парсер конкретной столовой по её ID в базе данных
@@ -69,6 +75,7 @@ async def start_canteens_parser(canteen_id: int, response: Response, canteens_se
 
 
 @router.put('/canteen{canteen_id}/deactivate')
+@log_api_decorator
 async def deactivate_parsing(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция деактивирует парсинг столовой
@@ -79,6 +86,7 @@ async def deactivate_parsing(canteen_id: int, response: Response, canteens_servi
 
 
 @router.put('/canteen{canteen_id}/reactivate')
+@log_api_decorator
 async def reactivate_parsing(canteen_id: int, response: Response, canteens_service=Depends(get_canteens_service)):
     """
     Функция реактивирует парсинг столовой
@@ -99,5 +107,6 @@ async def reactivate_parsing(canteen_id: int, response: Response, canteens_servi
 
 
 @router.get("/jobs/getAll")
+@log_api_decorator
 async def get_all_jobs(response: Response, scheduler_service: SchedulerService = Depends(get_scheduler_service)):
     return await scheduler_service.get_all_jobs()

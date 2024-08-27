@@ -3,8 +3,10 @@ from datetime import datetime
 
 from application.interfaces.scheduler_interface import SchedulerInterface
 from application.services.canteen_service import CanteensService
+from application.services.s3_service import S3Service
 from application.use_cases.set_all_scheduler_use_case import SetAllSchedulersJobsUseCase
 from application.use_cases.set_jobs_by_canteen_use_case import SetJobsByCanteenUseCase
+from application.use_cases.set_s3_scheduler_job import SetS3JobUseCase
 from domain.entities.job import Job
 
 
@@ -12,16 +14,22 @@ class SchedulerService:
     def __init__(self,
                  scheduler_interface: SchedulerInterface,
                  canteens_service: CanteensService,
+                 s3_service: S3Service,
                  ):
         self.scheduler_interface = scheduler_interface
         self.set_jobs_use_case = SetJobsByCanteenUseCase(
             scheduler_interface=scheduler_interface,
             # canteens_service=canteens_service
         )
+        self.set_s3_jobs_use_case = SetS3JobUseCase(
+            scheduler_interface=scheduler_interface,
+            s3_service=s3_service,
+        )
         self.set_all_schedulers_jobs = SetAllSchedulersJobsUseCase(
             scheduler_interface=scheduler_interface,
-            set_jobs_use_case=self.set_jobs_use_case,
-            canteens_service=canteens_service
+            set_canteens_jobs_use_case=self.set_jobs_use_case,
+            set_s3_jobs_use_case=self.set_s3_jobs_use_case,
+            canteens_service=canteens_service,
         )
 
     async def add_job(self, job: Job) -> None:
