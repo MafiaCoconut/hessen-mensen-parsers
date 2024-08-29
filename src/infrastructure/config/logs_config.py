@@ -23,9 +23,6 @@ def config():
     error_handler = logging.FileHandler("logs/error_data.log")
     error_handler.setFormatter(formatter)
 
-    # mensa_handler = logging.FileHandler('data/logs/mensa_data.log')
-    # mensa_handler.setFormatter(formatter)
-
     console_handler = logging.StreamHandler()
     console_handler.setFormatter(formatter)
 
@@ -44,9 +41,12 @@ def config():
         system_logger.setLevel(logging.INFO)
         error_logger.setLevel(logging.ERROR)
 
+    system_logger.addHandler(system_handler)
+
+    error_logger.addHandler(error_handler)
+
     apscheduler_logger.setLevel(logging.DEBUG)
     apscheduler_logger.addHandler(system_handler)
-    apscheduler_logger.addHandler(console_handler)
 
 
 def log_decorator(func, log_level=logging.DEBUG):

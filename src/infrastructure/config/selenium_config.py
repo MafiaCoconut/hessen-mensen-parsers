@@ -9,6 +9,7 @@ from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from dotenv import load_dotenv
 load_dotenv()
 
+
 def get_selenium_driver():
     FF_OPTIONS = [
         # '--headless',
@@ -45,7 +46,7 @@ def get_selenium_driver():
         geckodriver_path = "/usr/local/bin/geckodriver"
     # elif os.getenv("DEVICE") == "RaspberryTest":
     elif os.getenv("DEVICE") == "Raspberry" or os.getenv("DEVICE") == "RaspberryTest":
-        geckodriver_path = "/app/geckodriver"
+        geckodriver_path = "/src/geckodriver"
     else:
         raise Exception(f"Неправильный ENV DEVICE.Текущий - {os.getenv("DEVICE")} ")
 
@@ -55,6 +56,7 @@ def get_selenium_driver():
     driver = webdriver.Firefox(service=Service(geckodriver_path), options=options)
 
     return driver
+
 
 if __name__ == '__main__':
     driver = get_selenium_driver()
