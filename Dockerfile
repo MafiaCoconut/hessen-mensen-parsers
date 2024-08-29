@@ -14,8 +14,6 @@ RUN pip install --no-cache-dir -r  requirements.txt
 COPY /src /src
 WORKDIR /src
 
-COPY geckodriver /src/
-
 RUN chmod +x geckodriver
 
 CMD ["uvicorn", "main:app", "--reload", "--port", "8001", "--host", "0.0.0.0"]
