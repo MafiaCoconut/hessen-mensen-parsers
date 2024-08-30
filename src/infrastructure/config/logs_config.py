@@ -56,7 +56,7 @@ def log_decorator(log_level=logging.DEBUG, print_args=True, print_kwargs=True):
         async def wrapper(*args, **kwargs):
             file_path = inspect.getfile(func)
             file_name = file_path[file_path.rfind("/")+1:]
-            msg = f"Called function: {func.__name__} from file: {file_name}."
+            msg = f"Called function: {file_name}[{func.__name__}]"
             if print_args:
                 msg += f" Args: {args}."
             if print_kwargs:
