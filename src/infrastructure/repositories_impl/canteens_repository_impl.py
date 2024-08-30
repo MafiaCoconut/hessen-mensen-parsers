@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import insert, select, update, delete, text
 from application.repositories.canteens_repository import CanteensRepository
 from domain.entities.canteen import Canteen
+from infrastructure.config.logs_config import log_decorator
 from infrastructure.db.base import async_engine, async_session_factory
 from infrastructure.db.models.canteens_orm import CanteensOrm
 from icecream import ic
@@ -15,6 +16,7 @@ class CanteensRepositoryImpl(CanteensRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
+    @log_decorator()
     async def get_all(self) -> Sequence[Canteen]:
         async with self.session.begin():
             query = select(CanteensOrm)
@@ -29,6 +31,7 @@ class CanteensRepositoryImpl(CanteensRepository):
                 created_at=canteen.created_at,
             ) for canteen in canteens]
 
+    @log_decorator()
     async def get(self, canteen_id: int) -> Canteen:
         async with self.session.begin():
             query = select(CanteensOrm).where(CanteensOrm.canteen_id == canteen_id)
@@ -50,6 +53,7 @@ class CanteensRepositoryImpl(CanteensRepository):
             except:
                 raise CanteenWrongDataException()
 
+    @log_decorator()
     async def save(self, canteen: Canteen = None) -> None:
         async with self.session.begin():
             canteen_orm = CanteensOrm(
@@ -63,6 +67,7 @@ class CanteensRepositoryImpl(CanteensRepository):
             self.session.add(canteen_orm)
             await self.session.commit()
 
+    @log_decorator()
     async def delete_all(self) -> None:
         async with self.session.begin():
             await self.session.execute(delete(CanteensOrm))
@@ -70,6 +75,7 @@ class CanteensRepositoryImpl(CanteensRepository):
 
             await self.session.commit()
 
+    @log_decorator()
     async def delete(self, canteen_id: int) -> None:
         async with self.session.begin():
             query = (
@@ -79,6 +85,7 @@ class CanteensRepositoryImpl(CanteensRepository):
             await self.session.execute(query)
             await self.session.commit()
 
+    @log_decorator()
     async def update_status(self, canteen_id: int, new_status: str) -> None:
         async with self.session.begin():
             query = (

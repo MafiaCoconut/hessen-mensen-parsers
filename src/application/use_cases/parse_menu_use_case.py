@@ -40,10 +40,10 @@ class ParseCanteensMenuUseCase:
     def giessen_thm_parser(self):
         return self.canteens_provider.get_giessen_thm_parser_interface()
 
-    @log_decorator
+    @log_decorator()
     async def parse_canteen(self, canteen_id: int):
         canteens_repository = self.repositories_provider.get_canteens_repository()
-        main_dishes_repository = self.repositories_provider.get_side_dishes_repository()
+        main_dishes_repository = self.repositories_provider.get_main_dishes_repository()
         side_dishes_repository = self.repositories_provider.get_side_dishes_repository()
 
         await main_dishes_repository.delete_old_dishes(canteen_id)
@@ -70,7 +70,7 @@ class ParseCanteensMenuUseCase:
 
         return result
 
-    @log_decorator
+    @log_decorator()
     async def parse_all_canteens(self):
         # TODO при активации нужно проверять какие столовые имеют статус "active"
         # TODO переделать под use case и использовать репозиторий, чтобы получать нужные данные

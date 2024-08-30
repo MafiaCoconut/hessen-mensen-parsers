@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from application.repositories.main_dishes_repository import MainDishesRepository
 from domain.entities.main_dish import MainDish
+from infrastructure.config.logs_config import log_decorator
 from infrastructure.db.base import async_engine, async_session_factory, Base
 from infrastructure.db.models.main_dishes_orm import MainDishesOrm
 from sqlalchemy import select, delete, text
@@ -17,6 +18,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
+    @log_decorator()
     async def get(self, main_dish_id: int) -> MainDish:
         async with self.session.begin():
             query = (
@@ -38,6 +40,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
                 updated_at=main_dish.updated_at,
             )
 
+    @log_decorator()
     async def get_all_from_canteen(self, canteen_id: int) -> List[MainDish]:
         async with self.session.begin():
             query = (
@@ -58,6 +61,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
                 updated_at=main_dish.updated_at,
             ) for main_dish in main_dishes]
 
+    @log_decorator()
     async def get_all(self) -> List[MainDish]:
         async with self.session.begin():
             query = (select(MainDishesOrm))
@@ -75,6 +79,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
                 updated_at=main_dish.updated_at,
             ) for main_dish in main_dishes]
 
+    @log_decorator(print_kwargs=False)
     async def save(self, main_dish: MainDish):
         async with self.session.begin():
             main_dish = MainDishesOrm(
@@ -87,6 +92,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
             self.session.add(main_dish)
             await self.session.commit()
 
+    @log_decorator(print_kwargs=False)
     async def save_many(self, main_dishes: List[MainDish]):
         async with self.session.begin():
             for dish in main_dishes:
@@ -100,6 +106,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
                 self.session.add(main_dish)
             await self.session.commit()
 
+    @log_decorator()
     async def delete_old_dishes(self, canteen_id: int):
         async with self.session.begin():
             query = (
@@ -109,6 +116,7 @@ class MainDishesRepositoryImpl(MainDishesRepository):
             await self.session.execute(query)
             await self.session.commit()
 
+    @log_decorator()
     async def delete_all(self) -> None:
         async with self.session.begin():
             await self.session.execute(delete(MainDishesOrm))
