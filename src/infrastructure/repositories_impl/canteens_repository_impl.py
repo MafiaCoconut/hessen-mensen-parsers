@@ -18,7 +18,7 @@ class CanteensRepositoryImpl(CanteensRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def get_all(self) -> Sequence[Canteen]:
         async with self.session.begin():
             query = select(CanteensOrm)
@@ -36,7 +36,7 @@ class CanteensRepositoryImpl(CanteensRepository):
                 created_at=canteen.created_at,
             ) for canteen in canteens]
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def get(self, canteen_id: int) -> Canteen:
         async with self.session.begin():
             query = select(CanteensOrm).where(CanteensOrm.canteen_id == canteen_id)
@@ -61,7 +61,7 @@ class CanteensRepositoryImpl(CanteensRepository):
                 error_logger.error(e)
                 raise CanteenWrongDataException()
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def save(self, canteen: Canteen = None) -> None:
         async with self.session.begin():
             canteen_orm = CanteensOrm(
@@ -78,7 +78,7 @@ class CanteensRepositoryImpl(CanteensRepository):
             self.session.add(canteen_orm)
             await self.session.commit()
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def delete_all(self) -> None:
         async with self.session.begin():
             await self.session.execute(delete(CanteensOrm))
@@ -86,7 +86,7 @@ class CanteensRepositoryImpl(CanteensRepository):
 
             await self.session.commit()
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def delete(self, canteen_id: int) -> None:
         async with self.session.begin():
             query = (
@@ -96,7 +96,7 @@ class CanteensRepositoryImpl(CanteensRepository):
             await self.session.execute(query)
             await self.session.commit()
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def update_status(self, canteen_id: int, new_status: str) -> None:
         async with self.session.begin():
             query = (
@@ -107,7 +107,7 @@ class CanteensRepositoryImpl(CanteensRepository):
             await self.session.execute(query)
             await self.session.commit()
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def update_last_parsing_time(self, canteen_id: int, new_last_parsing_time: datetime) -> None:
         async with self.session.begin():
             query = (

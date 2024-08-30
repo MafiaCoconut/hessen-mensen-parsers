@@ -21,7 +21,7 @@ class GetCanteensMenuUseCase:
         self.repositories_provider = repositories_provider
         self.translation_service = translation_service
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def execute(self, canteen_id: int):
         """
         Функция берёт из репозиториев данные о запрашиваемой столовой и её текущих блюдах

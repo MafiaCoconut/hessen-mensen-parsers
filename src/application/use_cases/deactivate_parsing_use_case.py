@@ -15,7 +15,7 @@ class DeactivateParsingUseCase:
         self.scheduler_interface = scheduler_interface
         self.delete_jobs_use_case = delete_jobs_use_case
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def execute(self, canteen_id: int):
         canteens_repository = self.repositories_provider.get_canteens_repository()
 

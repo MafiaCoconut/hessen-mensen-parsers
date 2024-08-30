@@ -22,7 +22,7 @@ class SetAllSchedulersJobsUseCase:
         self.set_canteens_jobs_use_case = set_canteens_jobs_use_case
         self.set_s3_jobs_use_case = set_s3_jobs_use_case
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def execute(self):
         await self.set_parser_marburg_erlenring()
         await self.set_parser_marburg_lahnberge()
@@ -34,48 +34,48 @@ class SetAllSchedulersJobsUseCase:
         await self.set_s3_upload_logs()
         await self.scheduler_interface.start()
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def set_parser_marburg_erlenring(self):
         await self.set_canteens_jobs_use_case.execute(
             canteen=await self.canteens_service.get_canteen_obj(canteen_id=1),
             func=self.canteens_service.parse_canteen
         )
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def set_parser_marburg_lahnberge(self):
         await self.set_canteens_jobs_use_case.execute(
             canteen=await self.canteens_service.get_canteen_obj(canteen_id=2),
             func=self.canteens_service.parse_canteen
         )
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def set_parser_marburg_cafeteria(self):
         await self.set_canteens_jobs_use_case.execute(
             canteen=await self.canteens_service.get_canteen_obj(canteen_id=3),
             func=self.canteens_service.parse_canteen
         )
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def set_parser_marburg_mo_diner(self):
         await self.set_canteens_jobs_use_case.execute(
             canteen=await self.canteens_service.get_canteen_obj(canteen_id=4),
             func=self.canteens_service.parse_canteen
         )
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def set_parser_marburg_bistro(self):
         await self.set_canteens_jobs_use_case.execute(
             canteen=await self.canteens_service.get_canteen_obj(canteen_id=5),
             func=self.canteens_service.parse_canteen
         )
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def set_parser_giessen_thm(self):
         await self.set_canteens_jobs_use_case.execute(
             canteen=await self.canteens_service.get_canteen_obj(canteen_id=6),
             func=self.canteens_service.parse_canteen
         )
 
-    @log_decorator()
+    @log_decorator(print_args=False, print_kwargs=False)
     async def set_s3_upload_logs(self):
         await self.set_s3_jobs_use_case.execute()

@@ -14,7 +14,7 @@ class GetCanteenUseCase:
                  ):
         self.repositories_provider = repositories_provider
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def get_text(self, canteen_id: int) -> str:
         canteens_repository = self.repositories_provider.get_canteens_repository()
 
@@ -28,7 +28,7 @@ class GetCanteenUseCase:
         )
         return text
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def get_object(self, canteen_id: int) -> Canteen:
         canteens_repository = self.repositories_provider.get_canteens_repository()
 
@@ -38,7 +38,7 @@ class GetCanteenUseCase:
 
         return canteen
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def get_main_dishes_obj(self, canteen_id: int) -> list[MainDish]:
         main_dishes_repository = self.repositories_provider.get_main_dishes_repository()
         main_dishes = await main_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)
@@ -55,7 +55,7 @@ class GetCanteenUseCase:
             )
         return new_main_dishes
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def get_side_dishes_obj(self, canteen_id: int) -> list[SideDish]:
         side_dishes_repository = self.repositories_provider.get_side_dishes_repository()
         side_dishes = await side_dishes_repository.get_all_from_canteen(canteen_id=canteen_id)

@@ -9,7 +9,7 @@ class DeleteJobsByCanteenUseCase:
                  ):
         self.scheduler_interface = scheduler_interface
 
-    @log_decorator()
+    @log_decorator(print_args=False)
     async def execute(self, canteen: Canteen):
         times: dict = canteen.times
         times_keys = list(times.keys())
