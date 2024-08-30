@@ -10,6 +10,7 @@ from icecream import ic
 
 from application.use_cases.errors import MenuErrorCodes
 from domain.entities.canteen import Canteen
+from infrastructure.config.logs_config import log_decorator
 
 
 class GetCanteensMenuUseCase:
@@ -20,6 +21,7 @@ class GetCanteensMenuUseCase:
         self.repositories_provider = repositories_provider
         self.translation_service = translation_service
 
+    @log_decorator()
     async def execute(self, canteen_id: int):
         """
         Функция берёт из репозиториев данные о запрашиваемой столовой и её текущих блюдах

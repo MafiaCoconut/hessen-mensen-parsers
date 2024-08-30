@@ -1,6 +1,7 @@
 from application.interfaces.scheduler_interface import SchedulerInterface
 from domain.entities.canteen import Canteen
 from domain.entities.job import Job
+from infrastructure.config.logs_config import log_decorator
 
 
 class SetJobsByCanteenUseCase:

@@ -2,6 +2,7 @@ from application.interfaces.scheduler_interface import SchedulerInterface
 from application.providers.repositories_provider import RepositoriesProvider
 from application.repositories.canteens_repository import CanteensRepository
 from application.use_cases.delete_jobs_by_canteen_use_case import DeleteJobsByCanteenUseCase
+from infrastructure.config.logs_config import log_decorator
 
 
 class DeactivateParsingUseCase:
@@ -14,6 +15,7 @@ class DeactivateParsingUseCase:
         self.scheduler_interface = scheduler_interface
         self.delete_jobs_use_case = delete_jobs_use_case
 
+    @log_decorator()
     async def execute(self, canteen_id: int):
         canteens_repository = self.repositories_provider.get_canteens_repository()
 

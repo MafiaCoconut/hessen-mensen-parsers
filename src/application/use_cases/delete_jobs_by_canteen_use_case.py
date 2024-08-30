@@ -1,5 +1,6 @@
 from application.interfaces.scheduler_interface import SchedulerInterface
 from domain.entities.canteen import Canteen
+from infrastructure.config.logs_config import log_decorator
 
 
 class DeleteJobsByCanteenUseCase:
@@ -8,6 +9,7 @@ class DeleteJobsByCanteenUseCase:
                  ):
         self.scheduler_interface = scheduler_interface
 
+    @log_decorator()
     async def execute(self, canteen: Canteen):
         times: dict = canteen.times
         times_keys = list(times.keys())

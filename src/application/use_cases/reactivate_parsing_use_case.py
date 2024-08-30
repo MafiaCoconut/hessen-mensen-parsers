@@ -4,6 +4,7 @@ from application.interfaces.scheduler_interface import SchedulerInterface
 from application.providers.repositories_provider import RepositoriesProvider
 from application.repositories.canteens_repository import CanteensRepository
 from application.use_cases.set_jobs_by_canteen_use_case import SetJobsByCanteenUseCase
+from infrastructure.config.logs_config import log_decorator
 
 
 class ReactivateParsingUseCase:
@@ -16,6 +17,7 @@ class ReactivateParsingUseCase:
         self.scheduler_interface = scheduler_interface
         self.set_jobs_use_case = set_jobs_use_case
 
+    @log_decorator()
     async def execute(self, canteen_id: int, func: Callable):
         canteens_repository = self.repositories_provider.get_canteens_repository()
 

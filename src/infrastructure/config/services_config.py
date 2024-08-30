@@ -13,8 +13,6 @@ from infrastructure.config.validators_config import dishes_validator
 def get_canteens_service() -> CanteensService:
     return CanteensService(
         repositories_provider=repositories_provider,
-        main_dishes_repository=get_main_dishes_repository(),
-        side_dishes_repository=get_side_dishes_repository(),
         canteens_provider=canteens_provider,
         translation_service=translation_service,
         dishes_validator=dishes_validator,
