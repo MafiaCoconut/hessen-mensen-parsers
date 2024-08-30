@@ -1,5 +1,6 @@
 from typing import List
 
+from application.providers.repositories_provider import RepositoriesProvider
 from application.repositories.main_dishes_repository import MainDishesRepository
 from application.repositories.side_dishes_repository import SideDishesRepository
 from application.validators.dishes_validator import DishesValidator
@@ -9,23 +10,19 @@ from domain.entities.side_dish import SideDish
 
 class SaveMenuUseCase:
     def __init__(self,
-                 main_dishes_repository: MainDishesRepository,
-                 side_dishes_repository: SideDishesRepository,
+                 repositories_provider: RepositoriesProvider,
                  dishes_validator: DishesValidator,
                  ):
-        self.main_dish_repository = main_dishes_repository
-        self.side_dish_repository = side_dishes_repository
+        self.repositories_provider = repositories_provider
         self.dishes_validator = dishes_validator
 
     async def execute(self, main_dishes: List[MainDish], side_dishes: List[SideDish]):
         if all(dish.canteen_id == main_dishes[0].canteen_id for dish in main_dishes) if main_dishes else True:
             await self.check_on_none_values_main_dishes(main_dishes=main_dishes)
-            # self.main_dish_repository.save_many(main_dishes)
         else:
             raise ValueError("Переданы предметы main_dishes из разных столовых")
 
         if all(dish.canteen_id == side_dishes[0].canteen_id for dish in side_dishes) if side_dishes else True:
-            # self.side_dish_repository.save_many(side_dishes)
             await self.check_on_none_values_side_dishes(side_dishes=side_dishes)
         else:
             raise ValueError("Переданы предметы side_dishes из разных столовых")
@@ -56,7 +53,8 @@ class SaveMenuUseCase:
                     break
 
             if flag:
-                await self.main_dish_repository.save(main_dish)
+                main_dish_repository = self.repositories_provider.get_main_dishes_repository()
+                await main_dish_repository.save(main_dish)
             else:
                 continue
 
@@ -87,7 +85,8 @@ class SaveMenuUseCase:
                     break
 
             if flag:
-                await self.side_dish_repository.save(side_dish)
+                side_dish_repository = self.repositories_provider.get_side_dishes_repository()
+                await side_dish_repository.save(side_dish)
             else:
                 continue
 

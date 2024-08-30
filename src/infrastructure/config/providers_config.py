@@ -1,5 +1,6 @@
 from infrastructure.providers_impl.canteens_provider_impl import CanteensDependencyProviderImpl
 from infrastructure.config import canteens_interfaces_provider
+from infrastructure.providers_impl.repositories_provider_impl import RepositoriesProviderImpl
 
 canteens_provider = CanteensDependencyProviderImpl(
     marburg_erlenring=canteens_interfaces_provider.marburg_erlenring,
@@ -10,3 +11,4 @@ canteens_provider = CanteensDependencyProviderImpl(
     giessen_thm=canteens_interfaces_provider.giessen_thm,
 )
 
+repositories_provider = RepositoriesProviderImpl()

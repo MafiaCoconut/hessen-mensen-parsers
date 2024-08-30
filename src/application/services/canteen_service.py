@@ -1,5 +1,6 @@
 from application.interfaces.scheduler_interface import SchedulerInterface
 from application.providers.canteens_provider import CanteensDependencyProvider
+from application.providers.repositories_provider import RepositoriesProvider
 from application.repositories.canteens_repository import CanteensRepository
 from application.repositories.main_dishes_repository import MainDishesRepository
 from application.repositories.side_dishes_repository import SideDishesRepository
@@ -20,7 +21,7 @@ from domain.entities.side_dish import SideDish
 
 class CanteensService:
     def __init__(self,
-                 canteens_repository: CanteensRepository,
+                 repositories_provider: RepositoriesProvider,
                  main_dishes_repository: MainDishesRepository,
                  side_dishes_repository: SideDishesRepository,
                  canteens_provider: CanteensDependencyProvider,
@@ -28,7 +29,7 @@ class CanteensService:
                  dishes_validator: DishesValidator,
                  scheduler_interface: SchedulerInterface
                  ):
-        self.canteens_repository = canteens_repository
+        self.repositories_provider = repositories_provider
         self.main_dishes_repository = main_dishes_repository
         self.side_dishes_repository = side_dishes_repository
         self.canteens_provider = canteens_provider
@@ -36,19 +37,14 @@ class CanteensService:
         self.dishes_validator = dishes_validator
 
         self.get_canteen_use_case = GetCanteenUseCase(
-            canteens_repository=canteens_repository,
-            main_dishes_repository=self.main_dishes_repository,
-            side_dishes_repository=self.side_dishes_repository
+            repositories_provider=repositories_provider,
         )
         self.get_canteens_menu_use_case = GetCanteensMenuUseCase(
-            canteens_repository=canteens_repository,
-            main_dishes_repository=self.main_dishes_repository,
-            side_dishes_repository=self.side_dishes_repository,
+            repositories_provider=repositories_provider,
             translation_service=translation_service
         )
         self.save_canteens_menu_use_case = SaveMenuUseCase(
-            main_dishes_repository=self.main_dishes_repository,
-            side_dishes_repository=self.side_dishes_repository,
+            repositories_provider=repositories_provider,
             dishes_validator=self.dishes_validator
         )
         self.delete_jobs_by_canteen_use_case = DeleteJobsByCanteenUseCase(
@@ -58,12 +54,12 @@ class CanteensService:
             scheduler_interface=scheduler_interface,
         )
         self.deactivate_canteen_use_case = DeactivateParsingUseCase(
-            canteens_repository=canteens_repository,
+            repositories_provider=repositories_provider,
             scheduler_interface=scheduler_interface,
             delete_jobs_use_case=self.delete_jobs_by_canteen_use_case
         )
         self.reactivate_canteen_use_case = ReactivateParsingUseCase(
-            canteens_repository=canteens_repository,
+            repositories_provider=repositories_provider,
             scheduler_interface=scheduler_interface,
             set_jobs_use_case=self.set_jobs_use_case
         )
