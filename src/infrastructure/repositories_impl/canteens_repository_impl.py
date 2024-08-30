@@ -1,3 +1,5 @@
+import logging
+from datetime import datetime
 from typing import List, Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -26,6 +28,9 @@ class CanteensRepositoryImpl(CanteensRepository):
                 canteen_id=canteen.canteen_id,
                 name=canteen.name,
                 description=canteen.description,
+                status=canteen.status,
+                times=canteen.times,
+                last_parsing_time=canteen.last_parsing_time,
                 opened_time=canteen.opened_time,
                 closed_time=canteen.closed_time,
                 created_at=canteen.created_at,
@@ -44,13 +49,16 @@ class CanteensRepositoryImpl(CanteensRepository):
                     canteen_id=canteen.canteen_id,
                     name=canteen.name,
                     description=canteen.description,
+                    status=canteen.status,
+                    times=canteen.times,
+                    last_parsing_time=canteen.last_parsing_time,
                     opened_time=canteen.opened_time,
                     closed_time=canteen.closed_time,
                     created_at=canteen.created_at,
-                    status=canteen.status,
-                    times=canteen.times,
                 )
-            except:
+            except Exception as e:
+                error_logger = logging.getLogger("error_logger")
+                error_logger.error(e)
                 raise CanteenWrongDataException()
 
     @log_decorator()
@@ -59,9 +67,12 @@ class CanteensRepositoryImpl(CanteensRepository):
             canteen_orm = CanteensOrm(
                 canteen_id=canteen.canteen_id,
                 name=canteen.name,
+                description=canteen.description,
+                status=canteen.status,
+                times=canteen.times,
+                last_parsing_time=canteen.last_parsing_time,
                 opened_time=canteen.opened_time,
                 closed_time=canteen.closed_time,
-                description=canteen.description,
                 created_at=canteen.created_at
             )
             self.session.add(canteen_orm)
@@ -95,6 +106,19 @@ class CanteensRepositoryImpl(CanteensRepository):
             )
             await self.session.execute(query)
             await self.session.commit()
+
+    @log_decorator()
+    async def update_last_parsing_time(self, canteen_id: int, new_last_parsing_time: datetime) -> None:
+        async with self.session.begin():
+            query = (
+                update(CanteensOrm)
+                .where(CanteensOrm.canteen_id == canteen_id)
+                .values(last_parsing_time=new_last_parsing_time)
+            )
+            await self.session.execute(query)
+            await self.session.commit()
+
+
 
 
 

@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from datetime import datetime
 from typing import List
 from sqlalchemy.orm import Session
 
@@ -30,6 +31,11 @@ class CanteensRepository(ABC):
     @abstractmethod
     async def update_status(self, canteen_id: int, new_status: str) -> None:
         pass
+
+    @abstractmethod
+    async def update_last_parsing_time(self, canteen_id: int, new_last_parsing_time: datetime) -> None:
+        pass
+
 
 
 

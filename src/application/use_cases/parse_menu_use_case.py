@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from application.interfaces.parser_interface import CanteenParserInterface
 from application.providers.canteens_provider import CanteensDependencyProvider
 from application.providers.repositories_provider import RepositoriesProvider
@@ -64,6 +66,7 @@ class ParseCanteensMenuUseCase:
             case 6:
                 result = self.giessen_thm_parser.parse()
 
+        await canteens_repository.update_last_parsing_time(canteen_id=canteen_id, new_last_parsing_time=datetime.now())
         await self.save_canteens_menu_use_case.execute(
             main_dishes=result['main_dishes'], side_dishes=result['side_dishes']
         )

@@ -4,6 +4,7 @@ from application.providers.repositories_provider import RepositoriesProvider
 from application.repositories.main_dishes_repository import MainDishesRepository
 from application.repositories.side_dishes_repository import SideDishesRepository
 from application.validators.dishes_validator import DishesValidator
+from domain.entities.canteen import Canteen
 from domain.entities.main_dish import MainDish
 from domain.entities.side_dish import SideDish
 from infrastructure.config.logs_config import log_decorator
