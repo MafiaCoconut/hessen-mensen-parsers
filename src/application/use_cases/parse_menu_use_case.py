@@ -3,6 +3,7 @@ from datetime import datetime
 from application.interfaces.parser_interface import CanteenParserInterface
 from application.providers.canteens_provider import CanteensDependencyProvider
 from application.providers.repositories_provider import RepositoriesProvider
+from application.repositories.canteens_repository import CanteensRepository
 from application.use_cases.save_menu_use_case import SaveMenuUseCase
 from infrastructure.config.logs_config import log_decorator
 
@@ -52,31 +53,37 @@ class ParseCanteensMenuUseCase:
         await side_dishes_repository.delete_old_dishes(canteen_id=canteen_id)
 
         result = None
-        match canteen_id:
-            case 1:
-                result = self.marburg_erlenring_parser.parse()
-            case 2:
-                result = self.marburg_lahnberge_parser.parse()
-            case 3:
-                result = self.marburg_bistro_parser.parse()
-            case 4:
-                result = self.marburg_cafeteria_parser.parse()
-            case 5:
-                result = self.marburg_mo_diner_parser.parse()
-            case 6:
-                result = self.giessen_thm_parser.parse()
+        if await self.check_is_active(canteen_id=canteen_id, canteens_repository=canteens_repository):
+            match canteen_id:
+                case 1:
+                    if await self.check_is_active(canteen_id=canteen_id, canteens_repository=canteens_repository):
+                        result = self.marburg_erlenring_parser.parse()
+                case 2:
+                    if await self.check_is_active(canteen_id=canteen_id, canteens_repository=canteens_repository):
+                        result = self.marburg_lahnberge_parser.parse()
+                case 3:
+                    if await self.check_is_active(canteen_id=canteen_id, canteens_repository=canteens_repository):
+                        result = self.marburg_bistro_parser.parse()
+                case 4:
+                    if await self.check_is_active(canteen_id=canteen_id, canteens_repository=canteens_repository):
+                        result = self.marburg_cafeteria_parser.parse()
+                case 5:
+                    if await self.check_is_active(canteen_id=canteen_id, canteens_repository=canteens_repository):
+                        result = self.marburg_mo_diner_parser.parse()
+                case 6:
+                        result = self.giessen_thm_parser.parse()
 
-        await canteens_repository.update_last_parsing_time(canteen_id=canteen_id, new_last_parsing_time=datetime.now())
-        await self.save_canteens_menu_use_case.execute(
-            main_dishes=result['main_dishes'], side_dishes=result['side_dishes']
-        )
+            await canteens_repository.update_last_parsing_time(canteen_id=canteen_id, new_last_parsing_time=datetime.now())
+            await self.save_canteens_menu_use_case.execute(
+                main_dishes=result['main_dishes'], side_dishes=result['side_dishes']
+            )
+            return result
 
-        return result
+        else:
+            return {"text": "Canteen is deactivated"}
 
     @log_decorator(print_args=False, print_kwargs=False)
     async def parse_all_canteens(self):
-        # TODO при активации нужно проверять какие столовые имеют статус "active"
-        # TODO переделать под use case и использовать репозиторий, чтобы получать нужные данные
         canteens = {
             1: "erlenring",
             2: "lahnberge",
@@ -90,4 +97,12 @@ class ParseCanteensMenuUseCase:
         for i in canteens.keys():
             result[canteens[i]] = await self.parse_canteen(canteen_id=i)
         return result
+
+    @log_decorator(print_args=False)
+    async def check_is_active(self, canteen_id: int, canteens_repository: CanteensRepository):
+        canteen = await canteens_repository.get(canteen_id=canteen_id)
+        if canteen.status == "active":
+            return True
+        return False
+
 

@@ -72,4 +72,11 @@ class GetCanteenUseCase:
             )
         return new_side_dishes
 
+    @log_decorator(print_args=False)
+    async def get_status(self, canteen_id: int) -> str:
+        canteens_repository = self.repositories_provider.get_canteens_repository()
+        canteen = await canteens_repository.get(canteen_id=canteen_id)
+        return canteen.status
+
+
 

@@ -89,16 +89,17 @@ class CanteensService:
        """
         return await self.get_canteens_menu_use_case.execute(canteen_id=canteen_id)
 
-
     async def delele_menu(self, canteen_id: int):
         await self.delete_main_dishes(canteen_id)
         await self.delete_side_dishes(canteen_id)
 
     async def delete_main_dishes(self, canteen_id):
-        await self.main_dishes_repository.delete_old_dishes(canteen_id)
+        main_dishes_repository = self.repositories_provider.get_main_dishes_repository()
+        await main_dishes_repository.delete_old_dishes(canteen_id)
 
     async def delete_side_dishes(self, canteen_id):
-        await self.side_dishes_repository.delete_old_dishes(canteen_id)
+        side_dishes_repository = self.repositories_provider.get_side_dishes_repository()
+        await side_dishes_repository.delete_old_dishes(canteen_id)
 
     async def get_main_dishes_obj(self, canteen_id):
         main_dishes = await self.get_canteen_use_case.get_main_dishes_obj(canteen_id)

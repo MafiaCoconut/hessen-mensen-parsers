@@ -1,4 +1,4 @@
-from fastapi import Depends, APIRouter, Response, status
+from fastapi import Depends, APIRouter, Response, status, BackgroundTasks
 from sqlalchemy.orm import Session
 
 from application.services.canteen_service import CanteensService
@@ -49,13 +49,18 @@ async def get_canteens_data(canteen_id: int, response: Response, canteens_servic
 
 @router.post('/canteen/startAllParsers')
 @log_api_decorator
-async def start_all_canteens_parser(response: Response, canteens_service=Depends(get_canteens_service)):
+async def start_all_canteens_parser(
+        response: Response, background_tasks: BackgroundTasks,
+        canteens_service=Depends(get_canteens_service)
+):
     """
     Функция после запроса по API запускает парсинг всех столовых
 
     :return: None
     """
-    return await canteens_service.parse_all_canteens()
+    background_tasks.add_task(canteens_service.parse_all_canteens)
+
+    return {"message": "Request received, processing in background"}
 
 
 @router.post('/canteen{canteen_id}/startParser')
