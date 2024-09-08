@@ -43,6 +43,10 @@ class ParseCanteensMenuUseCase:
     def giessen_thm_parser(self):
         return self.canteens_provider.get_giessen_thm_parser_interface()
 
+    @property
+    def giessen_cafeteria_campus_tor_parser(self):
+        return self.canteens_provider.get_giessen_cafeteria_campus_tor_parser_interface()
+
     @log_decorator(print_args=False)
     async def parse_canteen(self, canteen_id: int):
         canteens_repository = self.repositories_provider.get_canteens_repository()
@@ -71,8 +75,11 @@ class ParseCanteensMenuUseCase:
                     if await self.check_is_active(canteen_id=canteen_id, canteens_repository=canteens_repository):
                         result = self.marburg_mo_diner_parser.parse()
                 case 6:
+                    if await self.check_is_active(canteen_id=canteen_id, canteens_repository=canteens_repository):
                         result = self.giessen_thm_parser.parse()
-
+                case 7:
+                    if await self.check_is_active(canteen_id=canteen_id, canteens_repository=canteens_repository):
+                        result = self.giessen_cafeteria_campus_tor_parser.parse()
             await canteens_repository.update_last_parsing_time(canteen_id=canteen_id, new_last_parsing_time=datetime.now())
             await self.save_canteens_menu_use_case.execute(
                 main_dishes=result['main_dishes'], side_dishes=result['side_dishes']

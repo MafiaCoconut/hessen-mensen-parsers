@@ -30,6 +30,7 @@ class SetAllSchedulersJobsUseCase:
         await self.set_parser_marburg_cafeteria()
         await self.set_parser_marburg_mo_diner()
         await self.set_parser_giessen_thm()
+        await self.set_parser_giessen_cafeteria_campus_tor()
 
         await self.set_s3_upload_logs()
         await self.scheduler_interface.start()
@@ -73,6 +74,13 @@ class SetAllSchedulersJobsUseCase:
     async def set_parser_giessen_thm(self):
         await self.set_canteens_jobs_use_case.execute(
             canteen=await self.canteens_service.get_canteen_obj(canteen_id=6),
+            func=self.canteens_service.parse_canteen
+        )
+
+    @log_decorator(print_args=False, print_kwargs=False)
+    async def set_parser_giessen_cafeteria_campus_tor(self):
+        await self.set_canteens_jobs_use_case.execute(
+            canteen=await self.canteens_service.get_canteen_obj(canteen_id=7),
             func=self.canteens_service.parse_canteen
         )
 

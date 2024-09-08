@@ -28,3 +28,6 @@ class CanteensDependencyProvider(ABC):
     def get_giessen_thm_parser_interface(self) -> CanteenParserInterface:
         pass
 
+    @abstractmethod
+    def get_giessen_cafeteria_campus_tor_parser_interface(self) -> CanteenParserInterface:
+        pass

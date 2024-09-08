@@ -1,3 +1,5 @@
+from infrastructure.interfaces_impl.giessen_parsers_impl.giessen_cafeteria_campus_tor import \
+    GiessenCafeteriaCampusTorParserInterfaceImpl
 from infrastructure.interfaces_impl.giessen_parsers_impl.giessen_thm_parser_interface_impl import GiessenTHMParserInterfaceImpl
 from infrastructure.interfaces_impl.marburg_parsers_impl.marburg_bistro_parser_interface_impl import MarburgBistroParserInterfaceImpl
 from infrastructure.interfaces_impl.marburg_parsers_impl.marburg_cafeteria_parser_interface_impl import MarburgCafeteriaParserInterfaceImpl
@@ -11,4 +13,5 @@ marburg_bistro = MarburgBistroParserInterfaceImpl()
 marburg_cafeteria = MarburgCafeteriaParserInterfaceImpl()
 marburg_mo_diner = MarburgMoDinerParserInterfaceImpl()
 giessen_thm = GiessenTHMParserInterfaceImpl()
+giessen_cafeteria_campus_tor = GiessenCafeteriaCampusTorParserInterfaceImpl()
 
